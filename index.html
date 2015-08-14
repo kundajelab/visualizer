@@ -163,6 +163,7 @@
         $(document).ready(function($) {
             document.getElementById("root-dir").value = getCookie("rootdir");
             document.getElementById("root-url").value = getCookie("rooturl");
+            document.getElementById("ref-genome").value = getCookie("refgenome");
         });
     </script>
 
@@ -182,7 +183,7 @@
     <input type="text" size="100" id="root-url" name="root-url" placeholder="Root URL..." />
     <br><br>
 
-    <button onclick="load_files()">Load genome data files</button>
+    <button onclick="load_files()"><b>Load genome data files</b></button>
     <br><br><br>
 
     <text id="text_dir_root"><b>Genome data files found on your file system under </b></text><br>
@@ -198,8 +199,8 @@
     <select id="source" size=30 width=500 multiple onkeypress="return onkeypress_source(event)" ondblclick="listbox_moveacross('source', 'dest')">    </select>
     <br><br>
 
-    <button onclick="listbox_moveacross('source', 'dest')">Move down</button> &nbsp;
-    <button onclick="listbox_moveacross('dest', 'source')">Move up</button>
+    <button onclick="listbox_moveacross('source', 'dest')"><b>Move down</b></button> &nbsp;
+    <button onclick="listbox_moveacross('dest', 'source')"><b>Move up</b></button>
     <br><br>
 
     <b>Genome data files chosen</b><br>
@@ -269,15 +270,15 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
         <li> bed : 6-column bed.</li>
         <li> hammock : WashU epg. browser specific type.</li>
     </ul>
-    -color: hex color code (look for color hex codes at <a href="http://www.rapidtables.com/web/color/RGB_Color.htm" target="_blank">here</a>)
-    <br><br>
 
-    bam, bed and interaction types have their own colors (according to the strand of reads or the sign of scores).<br>
-    default color:
+    -color: hex color code (look for color hex codes at <a href="http://www.rapidtables.com/web/color/RGB_Color.htm" target="_blank">here</a>)
+    
         <ul style="list-style-type:circle">
+            bam, bed and interaction types have their own colors (according to the strand of reads or the sign of scores).
+            <br><br>            
             <li>bigwig : blue </li>
             <li>bedGraph : maroon </li>
-            <li>hammock : magenta </li>
+            <li>hammock : red </li>
         </ul>
 
     -name: by default track name is its filename.
@@ -447,7 +448,7 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
 
                 if ( lowercase.endsWith("hammock.gz") ) {
                     type = "hammock";
-                    color = "#FF00FF"; // magenta
+                    color = "#FF0000"; // red
                 }
                 else if ( lowercase.endsWith(".bam") ) {
                     type = "bam";
@@ -477,9 +478,17 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
         }
 
         function visualize() {            
-            var textarea = document.getElementById("text-area");
-            var lines = textarea.value.split("\n");
+            var ref_genome = document.getElementById("ref-genome").value.toLowerCase();
+            setCookie( "refgenome", ref_genome );
 
+            var textarea = document.getElementById("text-area");
+
+            if ( textarea.value == "" ) {
+                alert("No data to visualize!")
+                return;
+            }
+
+            var lines = textarea.value.split("\n");
             var json = JSON.parse(JSON.stringify(data_wubrowser_json_base));
 
             for(var i = 0; i < lines.length; i++) {
@@ -581,8 +590,6 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
 
                 json.push( obj );
             }            
-
-            var ref_genome = document.getElementById("ref-genome").value.toLowerCase();
 
             // save json in file system and send it to genome browser
             var req= new XMLHttpRequest();
