@@ -198,7 +198,7 @@
     <button onclick="listbox_selectall('dest', false)">Select none</button>
     <br><br>
 
-    <b>Specify track details (format: type,name,URL) </b><br>
+    <b>Specify track details (format: type,hex_color,name,URL) </b><br>
     
     -type: type of a track (don't leave it undefined)</b><br>
     <ul style="list-style-type:circle">
@@ -209,7 +209,7 @@
         <li> bam </li>
         <li> interaction : arc shaped interaction between two genome coords. <br>
             <ul style="list-style-type:circle">
-                Example: 6-column bed ( chr? \t start \t end \t chr?:start-end,score \t uniq_id strang (./-/+) )
+                Example: 6-column bed ( chr? \t start \t end \t chr?:start-end,score \t uniq_id strand (./-/+) )
         <pre>
 chr10   81058000        81059400        chr10:81106225-81108225,0.395519        1       .
 chr10   81059400        81060000        chr10:81106225-81108225,0.097934        101     .
@@ -247,11 +247,23 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
         <li> bed : 6-column bed.</li>
         <li> hammock : WashU epg. browser specific type.</li>
     </ul>
+    -color: hex color code (look for color hex codes at <a href="http://www.rapidtables.com/web/color/RGB_Color.htm" target="_blank">here</a>)
+    <br><br>
+
+    bam, bed and interaction types have their own colors (according to the strand of reads or the sign of scores).<br>
+    default color:
+        <ul style="list-style-type:circle">
+            <li>bigwig : blue </li>
+            <li>bedGraph : maroon </li>
+            <li>hammock : magenta </li>
+        </ul>
+
+    -name: by default track name is its filename.
+    <br><br>
 
     <br>
     <b>IMPORTANT! : Do not leave any "undefined" types in the text area below. Specify an appropriate type for them.</b><br>
-    <br>
-
+    
     <textarea id="text-area" style="white-space: pre; word-wrap: normal; width: 700; height: 500"></textarea>
     <br><br>
     <input type="text" size="30" id="ref-genome" placeholder="Ref. genome (hg19, mm9, ...)" /> &nbsp;
@@ -270,19 +282,30 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
            return base;
         }
 
-        function component_to_hex( c ) 
+        function component_to_hex( c ) // http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
         {
             var hex = c.toString(16);
             return hex.length == 1 ? "0" + hex : hex;
         }
 
-        function rgb_to_hex( rgb ) 
+        function rgb_to_hex( rgb ) // http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
         {
             var arr = rgb.split(",");   
             var r = parseInt( arr[0] );
             var g = parseInt( arr[1] );
             var b = parseInt( arr[2] );
             return "#" + component_to_hex(r) + component_to_hex(g) + component_to_hex(b);
+        }
+
+
+        function hex_to_rgb( hex ) // http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+        {
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
         }
 
         function get_chr_state_categories( chr_state ) 
@@ -395,30 +418,37 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
             for(var i = 0; i < listbox.options.length; i++) {
                 var opt = listbox.options[i];
                 var type = "";
+                var color = "";
                 var name = baseName( opt.value );
 
                 var lowercase = opt.text.toLowerCase();
 
                 if ( lowercase.endsWith("hammock.gz") ) {
                     type = "hammock";
+                    color = "#FF00FF"; // magenta
                 }
                 else if ( lowercase.endsWith(".bam") ) {
                     type = "bam";
+                    color = "#000000"; // black
                 }
                 else if ( lowercase.endsWith("bed.gz") || lowercase.endsWith("tagalign.gz") ) {
                     type = "bed";
+                    color = "#000000"; // black
                 }
                 else if ( lowercase.endsWith("bdg.gz") || lowercase.endsWith("bg.gz") || lowercase.endsWith("bedgraph.gz") ) {
                     type = "bedGraph";
+                    color = "#800000"; // maroon
                 }
                 else if ( lowercase.endsWith(".bigwig") || lowercase.endsWith(".bw") ) {
                     type = "bigwig";
+                    color = "#0000FF"; // blue
                 }
                 else {
                     type = "undefined"
+                    color = "#000000"; // black
                 }
 
-                text = text + type + "," + name + "," + opt.value + "\n";
+                text = text + type + "," + color + "," + name + "," + opt.value + "\n";
             }            
 
             textarea.value = text;
@@ -435,18 +465,20 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
 
                 if ( line == "" ) continue;
 
-                var type_name_url = line.split(",");
+                var type_color_name_url = line.split(",");
 
-                var type = type_name_url[0];
-                var name = type_name_url[1];
-                var url = type_name_url[2];
-
-                //console.log(type);
+                // parse to each component
+                var type = type_color_name_url[0];
+                var color = type_color_name_url[1];
+                var name = type_color_name_url[2];
+                var url = type_color_name_url[3];
 
                 var obj = null;
 
-                // color
-                var pr = 255; var pg = 128; var pb = 0;
+                // color                
+                var pr = hex_to_rgb(color).r;
+                var pg = hex_to_rgb(color).g;
+                var pb = hex_to_rgb(color).b;
 
                 switch( type ) {
 
@@ -475,13 +507,14 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
                         break;
 
                     case "bam":
-                        obj= { "type": "bam", "name": "", "url": url, "mode": 1,
+                        obj= { "type": "bam", "name": "", "url": url, "mode": 3,
                             "qtc": { "fontsize":"0pt","fontfamily":"sans-serif","fontbold":false, } };
                         break;
 
                     case "bedGraph":
                         obj= { "type": "bedGraph", "name": "", "url": url, "mode": 1,
-                            "qtc": {  "height" : 40, "anglescale":1, "thtype" : 0, "fontsize":"0pt","fontfamily":"sans-serif","fontbold":false, } };
+                            "qtc": {  "height" : 40, "anglescale":1, "thtype" : 0, "fontsize":"0pt","fontfamily":"sans-serif","fontbold":false, 
+                                    "pr": pr, "pg": pg, "pb": pb, } };
                         break;
 
                     case "bed":
@@ -507,7 +540,7 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
                     case "interaction":
                         obj= { "type": "interaction", "name": "", "url": url, "mode": 4, 
                             "qtc": { "anglescale":1,
-                                "fontsize":"10pt","fontfamily":"sans-serif","fontbold":false, } };
+                                "fontsize":"10pt","fontfamily":"sans-serif","fontbold":false, "pr": pr, "pg": pg, "pb": pb, } };
                         break;
 
                     case "hammock": 
