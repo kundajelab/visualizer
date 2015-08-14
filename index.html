@@ -1,0 +1,559 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" type="text/css" href="http://epigenomegateway.wustl.edu/browser/style.css" />
+    <script type="text/javascript" src="http://epigenomegateway.wustl.edu/browser/js/base.js"></script>
+    <script type="text/javascript" src="http://epigenomegateway.wustl.edu/browser/js/personality.js"></script>
+    <script type="text/javascript" src="http://epigenomegateway.wustl.edu/browser/js/embed.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+
+    <script>
+
+        var wubrowser_url   = "http://epigenomegateway.wustl.edu/browser/";
+        var tmp_json_url    = "http://mitra.stanford.edu/kundaje/leepc12/web_portal_cache/";
+        var width_trackname     = 150;
+
+        var dirRoot = "";
+        var urlRoot = "";
+
+        var data_wubrowser_json_base = 
+        [
+           {
+              "type":"native_track",
+              "list":[
+                 {
+                    "name":"refGene",
+                    "mode":"full",
+                 }
+              ]
+           },
+           {
+              "type":"coordinate_override",
+              "coord":"chr9,36329955,chr9,37537411",
+           },
+        ];
+
+        var data_chr_state_18 = 
+        [
+          {    "stateno":1,    "mnemonics":"TssA",    "desc":"Active TSS",    "color":"Red",    "rgb":"255,0,0",    "hex":"#FF0000"  },
+          {    "stateno":2,    "mnemonics":"TssFlnk",    "desc":"Flanking TSS",    "color":"Orange Red",    "rgb":"255,69,0",    "hex":"#FF4500"  },
+          {    "stateno":3,    "mnemonics":"TssFlnkU",    "desc":"Flanking TSS Upstream",    "color":"Orange Red",    "rgb":"255,69,0",    "hex":"#FF4500"  },
+          {    "stateno":4,    "mnemonics":"TssFlnkD",    "desc":"Flanking TSS Downstream",    "color":"Orange Red",    "rgb":"255,69,0",    "hex":"#FF4500"  },
+          {    "stateno":5,    "mnemonics":"Tx",    "desc":"Strong transcription",    "color":"Green",    "rgb":"0,128,0",    "hex":"#008000"  },
+          {    "stateno":6,    "mnemonics":"TxWk",    "desc":"Weak transcription",    "color":"DarkGreen",    "rgb":"0,100,0",    "hex":"#006400"  },
+          {    "stateno":7,    "mnemonics":"EnhG1",    "desc":"Genic enhancer1",    "color":"GreenYellow",    "rgb":"194,225,5",    "hex":"#C2E105"  },
+          {    "stateno":8,    "mnemonics":"EnhG2",    "desc":"Genic enhancer2",    "color":"GreenYellow",    "rgb":"194,225,5",    "hex":"#C2E105"  },
+          {    "stateno":9,    "mnemonics":"EnhA1",    "desc":"Active Enhancer 1",    "color":"Orange",    "rgb":"255,195,77",    "hex":"#FFC34D"  },
+          {    "stateno":10,    "mnemonics":"EnhA2",    "desc":"Active Enhancer 2",    "color":"Orange",    "rgb":"255,195,77",    "hex":"#FFC34D"  },
+          {    "stateno":11,    "mnemonics":"EnhWk",    "desc":"Weak Enhancer",    "color":"Yellow",    "rgb":"255,255,0",    "hex":"#FFFF00"  },
+          {    "stateno":12,    "mnemonics":"ZNF/Rpts",    "desc":"ZNF genes & repeats",    "color":"Medium Aquamarine",    "rgb":"102,205,170",    "hex":"#66CDAA"  },
+          {    "stateno":13,    "mnemonics":"Het",    "desc":"Heterochromatin",    "color":"PaleTurquoise",    "rgb":"138,145,208",    "hex":"#8A91D0"  },
+          {    "stateno":14,    "mnemonics":"TssBiv",    "desc":"Bivalent/Poised TSS",    "color":"IndianRed",    "rgb":"205,92,92",    "hex":"#CD5C5C"  },
+          {    "stateno":15,    "mnemonics":"EnhBiv",    "desc":"Bivalent Enhancer",    "color":"DarkKhaki",    "rgb":"189,183,107",    "hex":"#BDB76B"  },
+          {    "stateno":16,    "mnemonics":"ReprPC",    "desc":"Repressed PolyComb",    "color":"Silver",    "rgb":"128,128,128",    "hex":"#808080"  },
+          {    "stateno":17,    "mnemonics":"ReprPCWk",    "desc":"Weak Repressed PolyComb",    "color":"Gainsboro",    "rgb":"192,192,192",    "hex":"#C0C0C0"  },
+          {    "stateno":18,    "mnemonics":"Quies",    "desc":"Quiescent/Low",    "color":"White",    "rgb":"255,255,255",    "hex":"#FFFFFF"  }
+        ];
+
+        var data_chr_state_15 = 
+        [
+          {    "stateno":1,    "mnemonics":"TssA",    "desc":"Active TSS",    "color":"Red",    "rgb":"255,0,0",    "hex":"#FF0000"  },
+          {    "stateno":2,    "mnemonics":"TssAFlnk",    "desc":"Flanking Active TSS",    "color":"Orange Red",    "rgb":"255,69,0",    "hex":"#FF4500"  },
+          {    "stateno":3,    "mnemonics":"TxFlnk",    "desc":"Transcr. at gene 5' and 3'",    "color":"LimeGreen",    "rgb":"50,205,50",    "hex":"#32CD32"  },
+          {    "stateno":4,    "mnemonics":"Tx",    "desc":"Strong transcription",    "color":"Green",    "rgb":"0,128,0",    "hex":"#008000"  },
+          {    "stateno":5,    "mnemonics":"TxWk",    "desc":"Weak transcription",    "color":"DarkGreen",    "rgb":"0,100,0",    "hex":"#006400"  },
+          {    "stateno":6,    "mnemonics":"EnhG",    "desc":"Genic enhancers",    "color":"GreenYellow",    "rgb":"194,225,5",    "hex":"#C2E105"  },
+          {    "stateno":7,    "mnemonics":"Enh",    "desc":"Enhancers",    "color":"Yellow",    "rgb":"255,255,0",    "hex":"#FFFF00"  },
+          {    "stateno":8,    "mnemonics":"ZNF/Rpts",    "desc":"ZNF genes & repeats",    "color":"Medium Aquamarine",    "rgb":"102,205,170",    "hex":"#66CDAA"  },
+          {    "stateno":9,    "mnemonics":"Het",    "desc":"Heterochromatin",    "color":"PaleTurquoise",    "rgb":"138,145,208",    "hex":"#8A91D0"  },
+          {    "stateno":10,    "mnemonics":"TssBiv",    "desc":"Bivalent/Poised TSS",    "color":"IndianRed",    "rgb":"205,92,92",    "hex":"#CD5C5C"  },
+          {    "stateno":11,    "mnemonics":"BivFlnk",    "desc":"Flanking Bivalent TSS/Enh",    "color":"DarkSalmon",    "rgb":"233,150,122",    "hex":"#E9967A"  },
+          {    "stateno":12,    "mnemonics":"EnhBiv",    "desc":"Bivalent Enhancer",    "color":"DarkKhaki",    "rgb":"189,183,107",    "hex":"#BDB76B"  },
+          {    "stateno":13,    "mnemonics":"ReprPC",    "desc":"Repressed PolyComb",    "color":"Silver",    "rgb":"128,128,128",    "hex":"#808080"  },
+          {    "stateno":14,    "mnemonics":"ReprPCWk",    "desc":"Weak Repressed PolyComb",    "color":"Gainsboro",    "rgb":"192,192,192",    "hex":"#C0C0C0"  },
+          {    "stateno":15,    "mnemonics":"Quies",    "desc":"Quiescent/Low",    "color":"White",    "rgb":"255,255,255",    "hex":"#FFFFFF"  }
+        ];        
+
+        function load_files() {
+            dirRoot = document.getElementById("root-dir").value.trim();
+            urlRoot = document.getElementById("root-url").value.trim();
+
+            // empty both boxes
+            document.getElementById("source").options.length = 0;
+            document.getElementById("dest").options.length = 0;
+
+            // check if dirRoot is valid directory (preventing injection hacking)
+            var re = new RegExp('^[a-zA-Zа-яА-Я0-9_!/]+$')
+            if ( !dirRoot.match( re ) ) {
+                alert( "Irregular characters in root directory!");
+                return;
+            }
+            //alert(dirRoot + " " + urlRoot);
+
+            // get list of all files
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (req.readyState == 4 && req.status == 200) {
+                    var t = req.responseText;
+                    if (t.substr(0, 5) == 'ERROR') {
+                        alert('Failed to post data to server (error in cgi-bin app (getfiles)?)' + t, 3);
+                    } else {
+
+                        document.getElementById("text_dir_root").innerHTML= "<b>Genome data files found on the file system ("+dirRoot+")</b>";
+
+                        var listbox = document.getElementById( "source" );
+
+                        //console.log(t);
+                        
+                        var files = t.split("\n");
+
+                        for(var i = 0; i < files.length; i++ ) {
+                            var file = files[i];
+
+                            if ( file=="" ) {
+                                continue;
+                            }
+
+                            if ( file.endsWith(".tbi") ) {
+                                file = file.replace(".tbi","");
+                            }
+                            else if ( file.endsWith(".bai") ) {
+                                file = file.replace(".bai","");
+                            }
+
+                            var opt = document.createElement("option");
+                            opt.text = file.replace( dirRoot, "" );
+                            opt.value = file.replace( dirRoot, urlRoot);
+
+                            listbox.options.add(opt);
+                        }
+
+                        
+                    }
+                }
+            };
+
+            req.open('POST', 'http://' + location.hostname + '/cgi-bin/getfiles', true);
+            req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            req.send(dirRoot);
+        }
+
+        $(document).ready(function($) {
+        });
+    </script>
+
+    <title>Visualizer</title>
+</head>
+
+
+<body>
+    <h1>Genome data visualizer</h1>
+    <br><br>
+
+    <b>Root directory: (recursively find all genome data files under it) </b><br>
+    <input type="text" size="100" id="root-dir" placeholder="Root directory..." />
+    <br><br>
+
+    <b>Root URL: (corresponding URL for the root directory)</b><br>
+    <input type="text" size="100" id="root-url" placeholder="Root URL..." />
+    <br><br>
+
+    <button onclick="load_files()">Load genome data files</button>
+    <br><br><br>
+
+    <text id="text_dir_root"><b>Genome data files found on your file system under </b></text><br>
+    To move selected items down to the next box:
+    <ul style="list-style-type:circle"> 
+    <li>Type 'a' key</li>
+    <li>Click "Move down" button</li>
+    <li>Double-click</li>
+    </ul>
+    
+    <input type="text" size="50" id="filter-text" placeholder="Filter..." />
+    <br><br>
+    <select id="source" size=30 width=500 multiple onkeypress="return onkeypress_source(event)" ondblclick="listbox_moveacross('source', 'dest')">    </select>
+    <br><br>
+
+    <button onclick="listbox_moveacross('source', 'dest')">Move down</button> &nbsp;
+    <button onclick="listbox_moveacross('dest', 'source')">Move up</button>
+    <br><br>
+
+    <b>Genome data files chosen</b><br>
+    To move selected items up to the previous box:
+    <ul style="list-style-type:circle"> 
+    <li>Type 'a' key</li>
+    <li>Click "Move up" button</li>
+    <li>Double-click</li>
+    </ul>    <select id="dest" size=30 width=500 multiple onkeypress="return onkeypress_dest(event)" ondblclick="listbox_moveacross('dest', 'source')">    </select>
+    <br><br>
+
+    <button onclick="prepare()"><b>Prepare</b></button> &nbsp;
+    <button onclick="listbox_move('dest', 'up')">Move up</button> &nbsp;
+    <button onclick="listbox_move('dest', 'down')">Move down</button> &nbsp;
+    <button onclick="listbox_selectall('dest', true)">Select all</button> &nbsp;
+    <button onclick="listbox_selectall('dest', false)">Select none</button>
+    <br><br>
+
+    <b>Specify track details (format: type,name,URL) </b><br>
+    
+    -type: type of a track (don't leave it undefined)</b><br>
+    <ul style="list-style-type:circle">
+        <li> bigwig : automatic scaling </li>
+        <li> bigwig1 : fixed scaling, summary method = max (min:0 ~ max:40) </li>
+        <li> bigwig2 : fixed scaling, summary method = max (min:0 ~ max:200) </li>
+        <li> bigwig3 : fixed scaling, summary method = max (min:-40 ~ max:0) </li>
+        <li> bam </li>
+        <li> interaction : arc shaped interaction between two genome coords. <br>
+            <ul style="list-style-type:circle">
+                Example: 6-column bed ( chr? \t start \t end \t chr?:start-end,score \t uniq_id strang (./-/+) )
+        <pre>
+chr10   81058000        81059400        chr10:81106225-81108225,0.395519        1       .
+chr10   81059400        81060000        chr10:81106225-81108225,0.097934        101     .
+        </pre>
+            </ul>
+        </li>
+        <li> categorical15 : 15-state chromatin state map. 
+            <ul style="list-style-type:circle">
+                Example: 4-column bed ( chr? \t start \t end \t chr_state_id (integer) )
+                <pre>
+chr1    0       9800    15
+chr1    9800    10600   9        
+                </pre>
+            </ul>
+
+            <ul style="list-style-type:circle">
+                Add the following line to the edit box below for the chr. state map for epigenome E001 and E017.
+                <pre>
+categorical15,E001_chr15,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/coreMarks/jointModel/final/E001_15_coreMarks_stateno.bed.gz
+categorical15,E017_chr15,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/coreMarks/jointModel/final/E017_15_coreMarks_stateno.bed.gz
+                </pre>
+            </ul>
+
+        </li>
+        <li> categorical18 : 18-state chromatin state map. </li>
+
+            <ul style="list-style-type:circle">
+                Add the following line to the edit box below for the chr. state map for epigenome E004 and E050.
+                <pre>
+categorical18,E004_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/core_K27ac/jointModel/final/E004_18_core_K27ac_stateno.bed.gz
+categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/core_K27ac/jointModel/final/E050_18_core_K27ac_stateno.bed.gz
+                </pre>
+            </ul>
+
+        <li> bed : 6-column bed.</li>
+        <li> hammock : WashU epg. browser specific type.</li>
+    </ul>
+
+    <textarea id="text-area" style="white-space: pre; word-wrap: normal; width: 700; height: 500"></textarea>
+    <br><br>
+    <input type="text" size="30" id="ref-genome" placeholder="Ref. genome (hg19, mm9, ...)" /> &nbsp;
+    <button onclick="visualize()"><b>Visualize</b></button> &nbsp;
+    <br><br>
+
+    <text id="text_json_url"></text><br>
+
+
+    <script>
+        function baseName(str)
+        {
+           var base = new String(str).substring(str.lastIndexOf('/') + 1); 
+            //if(base.lastIndexOf(".") != -1)       
+            //    base = base.substring(0, base.lastIndexOf("."));
+           return base;
+        }
+
+        function component_to_hex( c ) 
+        {
+            var hex = c.toString(16);
+            return hex.length == 1 ? "0" + hex : hex;
+        }
+
+        function rgb_to_hex( rgb ) 
+        {
+            var arr = rgb.split(",");   
+            var r = parseInt( arr[0] );
+            var g = parseInt( arr[1] );
+            var b = parseInt( arr[2] );
+            return "#" + component_to_hex(r) + component_to_hex(g) + component_to_hex(b);
+        }
+
+        function get_chr_state_categories( chr_state ) 
+        {
+            var obj_categories = { "-1": ["no information", "transparent"] }; 
+
+            for(var i = 0; i < chr_state.length; i++ ) {
+                var st = chr_state[i];
+                var stateno = st.stateno;
+
+                obj_categories[ stateno.toString() ] = [ st.desc, rgb_to_hex( st.rgb ) ];
+            }
+
+            return obj_categories;
+        }        
+
+        function onkeypress_source(e) {
+            if (e.keyCode == 97 || e.which == 97) { // a key
+                listbox_moveacross('source', 'dest');
+                return false;
+            }
+            return true;
+        }
+
+        function onkeypress_dest(e) {
+            if (e.keyCode == 97 || e.which == 97) { // a key
+                listbox_moveacross('dest', 'source');            
+                return false;                
+            }
+            return true;
+        }
+
+        function listbox_move(listID, direction) {
+            var listbox = document.getElementById(listID);
+            var selIndex = listbox.selectedIndex;
+            if (-1 == selIndex) {
+                alert("Please select an option to move.");
+                return;
+            }
+            var increment = -1;
+            if (direction == 'up')
+                increment = -1;
+            else
+                increment = 1;
+            if ((selIndex + increment) < 0 || (selIndex + increment) > (listbox.options.length - 1)) {
+                return;
+            }
+            var selValue = listbox.options[selIndex].value;
+            var selText = listbox.options[selIndex].text;
+            listbox.options[selIndex].value = listbox.options[selIndex + increment].value
+            listbox.options[selIndex].text = listbox.options[selIndex + increment].text
+            listbox.options[selIndex + increment].value = selValue;
+            listbox.options[selIndex + increment].text = selText;
+            listbox.selectedIndex = selIndex + increment;
+        }
+
+        function listbox_moveacross(sourceID, destID) {
+            var src = document.getElementById(sourceID);
+            var dest = document.getElementById(destID);
+            for (var count = 0; count < src.options.length; count++) {
+                if (src.options[count].selected == true) {
+                    var option = src.options[count];
+                    var newoption = document.createElement("option");
+                    newoption.value = option.value;
+                    newoption.text = option.text;
+                    newoption.selected = true;
+                    try {
+                        dest.add(newoption, null);
+                        src.remove(count, null);
+                    } catch (error) {
+                        dest.add(newoption);
+                        src.remove(count);
+                    }
+
+                    count--;
+                }
+            }
+        }
+
+        function listbox_selectall(listID, isselect) {
+            var listbox = document.getElementById(listID);
+            for (var count = 0; count < listbox.options.length; count++) {
+                listbox.options[count].selected = isselect;
+            }
+        }
+
+        $("#filter-text").keyup(function() {
+            var searchString = $(this).val().toLowerCase();
+            //console.log("filter: " + searchString);
+            var $opts = $("#source").find("option");
+            $opts.each(function() {
+                var text = $(this).text().toLowerCase();
+                //found a match - show this entry
+                if (searchString == "" || text.indexOf(searchString) > -1) {                    
+                    //console.log("O: ", text);                    
+                    $(this).show();
+                } else {
+                    //console.log("X: ", text);
+                    $(this).hide();
+                }                
+            });
+        });
+
+        function prepare() {
+            var listbox = document.getElementById("dest");
+            var textarea = document.getElementById("text-area");
+
+            var text = "";
+
+            for(var i = 0; i < listbox.options.length; i++) {
+                var opt = listbox.options[i];
+                var type = "";
+                var name = baseName( opt.value );
+
+                var lowercase = opt.text.toLowerCase();
+
+                if ( lowercase.endsWith("hammock.gz") ) {
+                    type = "hammock";
+                }
+                else if ( lowercase.endsWith(".bam") ) {
+                    type = "bam";
+                }
+                else if ( lowercase.endsWith("bed.gz") || lowercase.endsWith("tagalign.gz") ) {
+                    type = "bed";
+                }
+                else if ( lowercase.endsWith("bdg.gz") || lowercase.endsWith("bg.gz") || lowercase.endsWith("bedgraph.gz") ) {
+                    type = "bedGraph";
+                }
+                else if ( lowercase.endsWith(".bigwig") || lowercase.endsWith(".bw") ) {
+                    type = "bigwig";
+                }
+                else {
+                    type = "undefined"
+                }
+
+                text = text + type + "," + name + "," + opt.value + "\n";
+            }            
+
+            textarea.value = text;
+        }
+
+        function visualize() {            
+            var textarea = document.getElementById("text-area");
+            var lines = textarea.value.split("\n");
+
+            var json = JSON.parse(JSON.stringify(data_wubrowser_json_base));
+
+            for(var i = 0; i < lines.length; i++) {
+                var line = lines[i];
+
+                if ( line == "" ) continue;
+
+                var type_name_url = line.split(",");
+
+                var type = type_name_url[0];
+                var name = type_name_url[1];
+                var url = type_name_url[2];
+
+                //console.log(type);
+
+                var obj = null;
+
+                // color
+                var pr = 255; var pg = 128; var pb = 0;
+
+                switch( type ) {
+
+                    case "bigwig": 
+                        obj = { "type": "bigwig", "name": "", "url": url, "mode": 1,
+                            "qtc" : { "anglescale":1, "height" : 40, "summeth":1, "thtype" : 0,
+                                "pr": pr, "pg": pg, "pb": pb, "smooth":3 } }; // pr pg pb: rgb color
+                        break;
+
+                    case "bigwig1": 
+                        obj = { "type": "bigwig", "name": "", "url": url, "mode": 1,
+                            "qtc" : { "anglescale":1, "height" : 40, "summeth":2, "thtype" : 1, "thmin" : 0, "thmax" : 40,
+                                "pr": pr, "pg": pg, "pb": pb, "smooth":3 } }; // pr pg pb: rgb color
+                        break;
+
+                    case "bigwig2": 
+                        obj = { "type": "bigwig", "name": "", "url": url, "mode": 1,
+                            "qtc" : { "anglescale":1, "height" : 40, "summeth":2, "thtype" : 1, "thmin" : 0, "thmax" : 200,
+                                "pr": pr, "pg": pg, "pb": pb, "smooth":3 } }; // pr pg pb: rgb color
+                        break;
+
+                    case "bigwig3": 
+                        obj = { "type": "bigwig", "name": "", "url": url, "mode": 1,
+                            "qtc" : { "anglescale":1, "height" : 40, "summeth":2, "thtype" : 1, "thmin" : -40, "thmax" : 0,
+                                "pr": pr, "pg": pg, "pb": pb, "smooth":3 } }; // pr pg pb: rgb color
+                        break;
+
+                    case "bam":
+                        obj= { "type": "bam", "name": "", "url": url, "mode": 1,
+                            "qtc": { "fontsize":"0pt","fontfamily":"sans-serif","fontbold":false, } };
+                        break;
+
+                    case "bedGraph":
+                        obj= { "type": "bedGraph", "name": "", "url": url, "mode": 1,
+                            "qtc": {  "height" : 40, "anglescale":1, "thtype" : 0, "fontsize":"0pt","fontfamily":"sans-serif","fontbold":false, } };
+                        break;
+
+                    case "bed":
+                        obj= { "type": "bed", "name": "", "url": url, "mode": 2, 
+                            "qtc": { "fontsize":"0pt","fontfamily":"sans-serif","fontbold":false, } };
+                    
+                        //obj.mode = 6;
+                        //obj.mode = 1; // full mode for other beds
+                        break;
+
+                    case "categorical15":
+                        obj= { "categories": [], "type": "categorical", "name": "", "url": url, "mode": 1,
+                            "qtc": {}, };
+                        obj.categories = get_chr_state_categories( data_chr_state_15 );
+                        break;
+
+                    case "categorical18":
+                        obj= { "categories": [], "type": "categorical", "name": "", "url": url, "mode": 1,
+                            "qtc": {}, };
+                        obj.categories = get_chr_state_categories( data_chr_state_18 );
+                        break;
+
+                    case "interaction":
+                        obj= { "type": "interaction", "name": "", "url": url, "mode": 4, 
+                            "qtc": { "anglescale":1,
+                                "fontsize":"10pt","fontfamily":"sans-serif","fontbold":false, } };
+                        break;
+
+                    case "hammock": 
+                        obj = { "type": "hammock", "name": "", "url": url, 
+                            "mode": "barplot", "showscoreidx":1, "boxcolor":rgb_to_hex( pr+","+pg+","+pb ),
+                            strokecolor:"#ff6600", 
+                            scorescalelst:[{"type":1,"min":0,"max":40},{"type":0},{"type":0},{"type":0}],
+                            scorenamelst:["signal value", "P value (-log10)","Q value (-log10)"],
+                                "qtc": { "summeth":2,
+                                    "fontsize":"0pt","fontfamily":"sans-serif",
+                                     "nr": pr, "ng": pg, "nb": pb, } };
+                        break;                    
+                }
+
+                obj.name = name;
+
+                json.push( obj );
+            }            
+
+            var ref_genome = document.getElementById("ref-genome").value.toLowerCase();
+
+            // save json in file system and send it to genome browser
+            var req= new XMLHttpRequest();
+
+            req.onreadystatechange = function() {
+                if(req.readyState==4 && req.status==200) {
+                    var t=req.responseText;
+                    if(t.substr(0,5)=='ERROR') {
+                        alert('Failed to post data to server (error in cgi-bin app?)'+t,3);
+                    } else {
+                        var url = wubrowser_url + "?genome="+ref_genome+"&tknamewidth="+width_trackname+"&datahub="+tmp_json_url+t;
+
+                        document.getElementById("text_json_url").innerHTML= "JSON url: <a href='"+ tmp_json_url+t+"' target='_blank'> "+ tmp_json_url+t + "</a>";
+
+                        window.open( url, "_blank");
+                    }
+                }
+            };
+
+            var json_str = JSON.stringify(json);
+
+//alert( json_str );
+            // save json at tmp_json_url
+            req.open('POST', 'http://'+location.hostname+'/cgi-bin/writejson', true);
+            req.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            req.send(json_str);
+        }
+
+    </script>
+
+</body>
+
+</html>
