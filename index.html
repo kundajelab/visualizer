@@ -21,61 +21,329 @@
 
         var data_wubrowser_json_base = 
         [
-           {
-              "type":"native_track",
-              "list":[
-                 {
-                    "name":"refGene",
-                    "mode":"full",
-                 }
-              ]
-           },
-           {
-              "type":"coordinate_override",
-              "coord":"chr9,36329955,chr9,37537411",
-           },
+           { "type":"native_track", "list":[ { "name":"refGene", "mode":"full", } ] },
+           { "type":"coordinate_override", "coord":"chr9,36329955,chr9,37537411", },
         ];
 
         var data_chr_state_18 = 
         [
-          {    "stateno":1,    "mnemonics":"TssA",    "desc":"Active TSS",    "color":"Red",    "rgb":"255,0,0",    "hex":"#FF0000"  },
-          {    "stateno":2,    "mnemonics":"TssFlnk",    "desc":"Flanking TSS",    "color":"Orange Red",    "rgb":"255,69,0",    "hex":"#FF4500"  },
-          {    "stateno":3,    "mnemonics":"TssFlnkU",    "desc":"Flanking TSS Upstream",    "color":"Orange Red",    "rgb":"255,69,0",    "hex":"#FF4500"  },
-          {    "stateno":4,    "mnemonics":"TssFlnkD",    "desc":"Flanking TSS Downstream",    "color":"Orange Red",    "rgb":"255,69,0",    "hex":"#FF4500"  },
-          {    "stateno":5,    "mnemonics":"Tx",    "desc":"Strong transcription",    "color":"Green",    "rgb":"0,128,0",    "hex":"#008000"  },
-          {    "stateno":6,    "mnemonics":"TxWk",    "desc":"Weak transcription",    "color":"DarkGreen",    "rgb":"0,100,0",    "hex":"#006400"  },
-          {    "stateno":7,    "mnemonics":"EnhG1",    "desc":"Genic enhancer1",    "color":"GreenYellow",    "rgb":"194,225,5",    "hex":"#C2E105"  },
-          {    "stateno":8,    "mnemonics":"EnhG2",    "desc":"Genic enhancer2",    "color":"GreenYellow",    "rgb":"194,225,5",    "hex":"#C2E105"  },
-          {    "stateno":9,    "mnemonics":"EnhA1",    "desc":"Active Enhancer 1",    "color":"Orange",    "rgb":"255,195,77",    "hex":"#FFC34D"  },
-          {    "stateno":10,    "mnemonics":"EnhA2",    "desc":"Active Enhancer 2",    "color":"Orange",    "rgb":"255,195,77",    "hex":"#FFC34D"  },
-          {    "stateno":11,    "mnemonics":"EnhWk",    "desc":"Weak Enhancer",    "color":"Yellow",    "rgb":"255,255,0",    "hex":"#FFFF00"  },
-          {    "stateno":12,    "mnemonics":"ZNF/Rpts",    "desc":"ZNF genes & repeats",    "color":"Medium Aquamarine",    "rgb":"102,205,170",    "hex":"#66CDAA"  },
-          {    "stateno":13,    "mnemonics":"Het",    "desc":"Heterochromatin",    "color":"PaleTurquoise",    "rgb":"138,145,208",    "hex":"#8A91D0"  },
-          {    "stateno":14,    "mnemonics":"TssBiv",    "desc":"Bivalent/Poised TSS",    "color":"IndianRed",    "rgb":"205,92,92",    "hex":"#CD5C5C"  },
-          {    "stateno":15,    "mnemonics":"EnhBiv",    "desc":"Bivalent Enhancer",    "color":"DarkKhaki",    "rgb":"189,183,107",    "hex":"#BDB76B"  },
-          {    "stateno":16,    "mnemonics":"ReprPC",    "desc":"Repressed PolyComb",    "color":"Silver",    "rgb":"128,128,128",    "hex":"#808080"  },
-          {    "stateno":17,    "mnemonics":"ReprPCWk",    "desc":"Weak Repressed PolyComb",    "color":"Gainsboro",    "rgb":"192,192,192",    "hex":"#C0C0C0"  },
-          {    "stateno":18,    "mnemonics":"Quies",    "desc":"Quiescent/Low",    "color":"White",    "rgb":"255,255,255",    "hex":"#FFFFFF"  }
+            {    "stateno":1,    "mnemonics":"TssA",    "desc":"Active TSS",    "color":"Red",    "rgb":"255,0,0",    "hex":"#FF0000"  },
+            {    "stateno":2,    "mnemonics":"TssFlnk",    "desc":"Flanking TSS",    "color":"Orange Red",    "rgb":"255,69,0",    "hex":"#FF4500"  },
+            {    "stateno":3,    "mnemonics":"TssFlnkU",    "desc":"Flanking TSS Upstream",    "color":"Orange Red",    "rgb":"255,69,0",    "hex":"#FF4500"  },
+            {    "stateno":4,    "mnemonics":"TssFlnkD",    "desc":"Flanking TSS Downstream",    "color":"Orange Red",    "rgb":"255,69,0",    "hex":"#FF4500"  },
+            {    "stateno":5,    "mnemonics":"Tx",    "desc":"Strong transcription",    "color":"Green",    "rgb":"0,128,0",    "hex":"#008000"  },
+            {    "stateno":6,    "mnemonics":"TxWk",    "desc":"Weak transcription",    "color":"DarkGreen",    "rgb":"0,100,0",    "hex":"#006400"  },
+            {    "stateno":7,    "mnemonics":"EnhG1",    "desc":"Genic enhancer1",    "color":"GreenYellow",    "rgb":"194,225,5",    "hex":"#C2E105"  },
+            {    "stateno":8,    "mnemonics":"EnhG2",    "desc":"Genic enhancer2",    "color":"GreenYellow",    "rgb":"194,225,5",    "hex":"#C2E105"  },
+            {    "stateno":9,    "mnemonics":"EnhA1",    "desc":"Active Enhancer 1",    "color":"Orange",    "rgb":"255,195,77",    "hex":"#FFC34D"  },
+            {    "stateno":10,    "mnemonics":"EnhA2",    "desc":"Active Enhancer 2",    "color":"Orange",    "rgb":"255,195,77",    "hex":"#FFC34D"  },
+            {    "stateno":11,    "mnemonics":"EnhWk",    "desc":"Weak Enhancer",    "color":"Yellow",    "rgb":"255,255,0",    "hex":"#FFFF00"  },
+            {    "stateno":12,    "mnemonics":"ZNF/Rpts",    "desc":"ZNF genes & repeats",    "color":"Medium Aquamarine",    "rgb":"102,205,170",    "hex":"#66CDAA"  },
+            {    "stateno":13,    "mnemonics":"Het",    "desc":"Heterochromatin",    "color":"PaleTurquoise",    "rgb":"138,145,208",    "hex":"#8A91D0"  },
+            {    "stateno":14,    "mnemonics":"TssBiv",    "desc":"Bivalent/Poised TSS",    "color":"IndianRed",    "rgb":"205,92,92",    "hex":"#CD5C5C"  },
+            {    "stateno":15,    "mnemonics":"EnhBiv",    "desc":"Bivalent Enhancer",    "color":"DarkKhaki",    "rgb":"189,183,107",    "hex":"#BDB76B"  },
+            {    "stateno":16,    "mnemonics":"ReprPC",    "desc":"Repressed PolyComb",    "color":"Silver",    "rgb":"128,128,128",    "hex":"#808080"  },
+            {    "stateno":17,    "mnemonics":"ReprPCWk",    "desc":"Weak Repressed PolyComb",    "color":"Gainsboro",    "rgb":"192,192,192",    "hex":"#C0C0C0"  },
+            {    "stateno":18,    "mnemonics":"Quies",    "desc":"Quiescent/Low",    "color":"White",    "rgb":"255,255,255",    "hex":"#FFFFFF"  }
         ];
 
         var data_chr_state_15 = 
         [
-          {    "stateno":1,    "mnemonics":"TssA",    "desc":"Active TSS",    "color":"Red",    "rgb":"255,0,0",    "hex":"#FF0000"  },
-          {    "stateno":2,    "mnemonics":"TssAFlnk",    "desc":"Flanking Active TSS",    "color":"Orange Red",    "rgb":"255,69,0",    "hex":"#FF4500"  },
-          {    "stateno":3,    "mnemonics":"TxFlnk",    "desc":"Transcr. at gene 5' and 3'",    "color":"LimeGreen",    "rgb":"50,205,50",    "hex":"#32CD32"  },
-          {    "stateno":4,    "mnemonics":"Tx",    "desc":"Strong transcription",    "color":"Green",    "rgb":"0,128,0",    "hex":"#008000"  },
-          {    "stateno":5,    "mnemonics":"TxWk",    "desc":"Weak transcription",    "color":"DarkGreen",    "rgb":"0,100,0",    "hex":"#006400"  },
-          {    "stateno":6,    "mnemonics":"EnhG",    "desc":"Genic enhancers",    "color":"GreenYellow",    "rgb":"194,225,5",    "hex":"#C2E105"  },
-          {    "stateno":7,    "mnemonics":"Enh",    "desc":"Enhancers",    "color":"Yellow",    "rgb":"255,255,0",    "hex":"#FFFF00"  },
-          {    "stateno":8,    "mnemonics":"ZNF/Rpts",    "desc":"ZNF genes & repeats",    "color":"Medium Aquamarine",    "rgb":"102,205,170",    "hex":"#66CDAA"  },
-          {    "stateno":9,    "mnemonics":"Het",    "desc":"Heterochromatin",    "color":"PaleTurquoise",    "rgb":"138,145,208",    "hex":"#8A91D0"  },
-          {    "stateno":10,    "mnemonics":"TssBiv",    "desc":"Bivalent/Poised TSS",    "color":"IndianRed",    "rgb":"205,92,92",    "hex":"#CD5C5C"  },
-          {    "stateno":11,    "mnemonics":"BivFlnk",    "desc":"Flanking Bivalent TSS/Enh",    "color":"DarkSalmon",    "rgb":"233,150,122",    "hex":"#E9967A"  },
-          {    "stateno":12,    "mnemonics":"EnhBiv",    "desc":"Bivalent Enhancer",    "color":"DarkKhaki",    "rgb":"189,183,107",    "hex":"#BDB76B"  },
-          {    "stateno":13,    "mnemonics":"ReprPC",    "desc":"Repressed PolyComb",    "color":"Silver",    "rgb":"128,128,128",    "hex":"#808080"  },
-          {    "stateno":14,    "mnemonics":"ReprPCWk",    "desc":"Weak Repressed PolyComb",    "color":"Gainsboro",    "rgb":"192,192,192",    "hex":"#C0C0C0"  },
-          {    "stateno":15,    "mnemonics":"Quies",    "desc":"Quiescent/Low",    "color":"White",    "rgb":"255,255,255",    "hex":"#FFFFFF"  }
-        ];        
+            {    "stateno":1,    "mnemonics":"TssA",    "desc":"Active TSS",    "color":"Red",    "rgb":"255,0,0",    "hex":"#FF0000"  },
+            {    "stateno":2,    "mnemonics":"TssAFlnk",    "desc":"Flanking Active TSS",    "color":"Orange Red",    "rgb":"255,69,0",    "hex":"#FF4500"  },
+            {    "stateno":3,    "mnemonics":"TxFlnk",    "desc":"Transcr. at gene 5' and 3'",    "color":"LimeGreen",    "rgb":"50,205,50",    "hex":"#32CD32"  },
+            {    "stateno":4,    "mnemonics":"Tx",    "desc":"Strong transcription",    "color":"Green",    "rgb":"0,128,0",    "hex":"#008000"  },
+            {    "stateno":5,    "mnemonics":"TxWk",    "desc":"Weak transcription",    "color":"DarkGreen",    "rgb":"0,100,0",    "hex":"#006400"  },
+            {    "stateno":6,    "mnemonics":"EnhG",    "desc":"Genic enhancers",    "color":"GreenYellow",    "rgb":"194,225,5",    "hex":"#C2E105"  },
+            {    "stateno":7,    "mnemonics":"Enh",    "desc":"Enhancers",    "color":"Yellow",    "rgb":"255,255,0",    "hex":"#FFFF00"  },
+            {    "stateno":8,    "mnemonics":"ZNF/Rpts",    "desc":"ZNF genes & repeats",    "color":"Medium Aquamarine",    "rgb":"102,205,170",    "hex":"#66CDAA"  },
+            {    "stateno":9,    "mnemonics":"Het",    "desc":"Heterochromatin",    "color":"PaleTurquoise",    "rgb":"138,145,208",    "hex":"#8A91D0"  },
+            {    "stateno":10,    "mnemonics":"TssBiv",    "desc":"Bivalent/Poised TSS",    "color":"IndianRed",    "rgb":"205,92,92",    "hex":"#CD5C5C"  },
+            {    "stateno":11,    "mnemonics":"BivFlnk",    "desc":"Flanking Bivalent TSS/Enh",    "color":"DarkSalmon",    "rgb":"233,150,122",    "hex":"#E9967A"  },
+            {    "stateno":12,    "mnemonics":"EnhBiv",    "desc":"Bivalent Enhancer",    "color":"DarkKhaki",    "rgb":"189,183,107",    "hex":"#BDB76B"  },
+            {    "stateno":13,    "mnemonics":"ReprPC",    "desc":"Repressed PolyComb",    "color":"Silver",    "rgb":"128,128,128",    "hex":"#808080"  },
+            {    "stateno":14,    "mnemonics":"ReprPCWk",    "desc":"Weak Repressed PolyComb",    "color":"Gainsboro",    "rgb":"192,192,192",    "hex":"#C0C0C0"  },
+            {    "stateno":15,    "mnemonics":"Quies",    "desc":"Quiescent/Low",    "color":"White",    "rgb":"255,255,255",    "hex":"#FFFFFF"  }
+        ];
+
+        var data_assay = [
+            {    "name":"H2A.Z",    "color":"#4169E1"  },
+            {    "name":"H2AK5ac",    "color":"#1E90FF"  },
+            {    "name":"H2AK9ac",    "color":"#87CEFA"  },
+            {    "name":"H2BK120ac",    "color":"#006400"  },
+            {    "name":"H2BK12ac",    "color":"#228B22"  },
+            {    "name":"H2BK15ac",    "color":"#32CD32"  },
+            {    "name":"H2BK20ac",    "color":"#90EE90"  },
+            {    "name":"H2BK5ac",    "color":"#98FB98"  },
+            {    "name":"H3K14ac",    "color":"#FF1493"  },
+            {    "name":"H3K18ac",    "color":"#FFB6C1"  },
+            {    "name":"H3K23ac",    "color":"#800000"  },
+            {    "name":"H3K23me2",    "color":"#A52A2A"  },
+            {    "name":"H3K27ac",    "color":"#CD5C5C"  },
+            {    "name":"H3K27me3",    "color":"#FFA07A"  },
+            {    "name":"H3K36me3",    "color":"#FF00FF"  },
+            {    "name":"H3K4ac",    "color":"#FF4500"  },
+            {    "name":"H3K4me1",    "color":"#FF8C00"  },
+            {    "name":"H3K4me2",    "color":"#FFD700"  },
+            {    "name":"H3K4me3",    "color":"#FFFF00"  },
+            {    "name":"H3K56ac",    "color":"#BDB76B"  },
+            {    "name":"H3K79me1",    "color":"#B8860B"  },
+            {    "name":"H3K79me2",    "color":"#DAA520"  },
+            {    "name":"H3K9ac",    "color":"#8B008B"  },
+            {    "name":"H3K9me1",    "color":"#BA55D3"  },
+            {    "name":"H3K9me3",    "color":"#D8BFD8"  },
+            {    "name":"H3T11ph",    "color":"#C71585"  },
+            {    "name":"H4K12ac",    "color":"#000000"  },
+            {    "name":"H4K20me1",    "color":"#696969"  },
+            {    "name":"H4K5ac",    "color":"#A9A9A9"  },
+            {    "name":"H4K8ac",    "color":"#C0C0C0"  },
+            {    "name":"H4K91ac",    "color":"#DCDCDC"  },
+            {    "name":"RNAseq",    "color":"#B0C4DE"  },
+            {    "name":"DNAMethyl",    "color":"#008080"  },
+            {    "name":"DNase",    "color":"#000080"  },
+            {    "name":"ChromatinAccessibility",    "color":"#00FFFF"  },
+            {    "name":"Digital_Genomic_Footprinting",    "color":"#7CFC00"  },
+        ];
+
+        var data_eid = [
+            {   "eid":"E017",   "color":"#E41A1C" },            {   "eid":"E002",   "color":"#924965" },
+            {   "eid":"E008",   "color":"#924965" },            {   "eid":"E001",   "color":"#924965" },
+            {   "eid":"E015",   "color":"#924965" },            {   "eid":"E014",   "color":"#924965" },
+            {   "eid":"E016",   "color":"#924965" },            {   "eid":"E003",   "color":"#924965" },
+            {   "eid":"E024",   "color":"#924965" },            {   "eid":"E020",   "color":"#69608A" },
+            {   "eid":"E019",   "color":"#69608A" },            {   "eid":"E018",   "color":"#69608A" },
+            {   "eid":"E021",   "color":"#69608A" },            {   "eid":"E022",   "color":"#69608A" },
+            {   "eid":"E007",   "color":"#4178AE" },            {   "eid":"E009",   "color":"#4178AE" },
+            {   "eid":"E010",   "color":"#4178AE" },            {   "eid":"E013",   "color":"#4178AE" },
+            {   "eid":"E012",   "color":"#4178AE" },            {   "eid":"E011",   "color":"#4178AE" },
+            {   "eid":"E004",   "color":"#4178AE" },            {   "eid":"E005",   "color":"#4178AE" },
+            {   "eid":"E006",   "color":"#4178AE" },            {   "eid":"E062",   "color":"#55A354" },
+            {   "eid":"E034",   "color":"#55A354" },            {   "eid":"E045",   "color":"#55A354" },
+            {   "eid":"E033",   "color":"#55A354" },            {   "eid":"E044",   "color":"#55A354" },
+            {   "eid":"E043",   "color":"#55A354" },            {   "eid":"E039",   "color":"#55A354" },
+            {   "eid":"E041",   "color":"#55A354" },            {   "eid":"E042",   "color":"#55A354" },
+            {   "eid":"E040",   "color":"#55A354" },            {   "eid":"E037",   "color":"#55A354" },
+            {   "eid":"E048",   "color":"#55A354" },            {   "eid":"E038",   "color":"#55A354" },
+            {   "eid":"E047",   "color":"#55A354" },            {   "eid":"E029",   "color":"#678C69" },
+            {   "eid":"E031",   "color":"#678C69" },            {   "eid":"E035",   "color":"#678C69" },
+            {   "eid":"E051",   "color":"#678C69" },            {   "eid":"E050",   "color":"#678C69" },
+            {   "eid":"E036",   "color":"#678C69" },            {   "eid":"E032",   "color":"#678C69" },
+            {   "eid":"E046",   "color":"#678C69" },            {   "eid":"E030",   "color":"#678C69" },
+            {   "eid":"E026",   "color":"#B65C73" },            {   "eid":"E049",   "color":"#B65C73" },
+            {   "eid":"E025",   "color":"#B65C73" },            {   "eid":"E023",   "color":"#B65C73" },
+            {   "eid":"E052",   "color":"#E67326" },            {   "eid":"E055",   "color":"#FF9D0C" },
+            {   "eid":"E056",   "color":"#FF9D0C" },            {   "eid":"E059",   "color":"#FF9D0C" },
+            {   "eid":"E061",   "color":"#FF9D0C" },            {   "eid":"E057",   "color":"#FF9D0C" },
+            {   "eid":"E058",   "color":"#FF9D0C" },            {   "eid":"E028",   "color":"#FF9D0C" },
+            {   "eid":"E027",   "color":"#FF9D0C" },            {   "eid":"E054",   "color":"#FFD924" },
+            {   "eid":"E053",   "color":"#FFD924" },            {   "eid":"E112",   "color":"#DAB92E" },
+            {   "eid":"E093",   "color":"#DAB92E" },            {   "eid":"E071",   "color":"#C5912B" },
+            {   "eid":"E074",   "color":"#C5912B" },            {   "eid":"E068",   "color":"#C5912B" },
+            {   "eid":"E069",   "color":"#C5912B" },            {   "eid":"E072",   "color":"#C5912B" },
+            {   "eid":"E067",   "color":"#C5912B" },            {   "eid":"E073",   "color":"#C5912B" },
+            {   "eid":"E070",   "color":"#C5912B" },            {   "eid":"E082",   "color":"#C5912B" },
+            {   "eid":"E081",   "color":"#C5912B" },            {   "eid":"E063",   "color":"#AF5B39" },
+            {   "eid":"E100",   "color":"#C2655D" },            {   "eid":"E108",   "color":"#C2655D" },
+            {   "eid":"E107",   "color":"#C2655D" },            {   "eid":"E089",   "color":"#C2655D" },
+            {   "eid":"E090",   "color":"#C2655D" },            {   "eid":"E083",   "color":"#D56F80" },
+            {   "eid":"E104",   "color":"#D56F80" },            {   "eid":"E095",   "color":"#D56F80" },
+            {   "eid":"E105",   "color":"#D56F80" },            {   "eid":"E065",   "color":"#D56F80" },
+            {   "eid":"E078",   "color":"#F182BC" },            {   "eid":"E076",   "color":"#F182BC" },
+            {   "eid":"E103",   "color":"#F182BC" },            {   "eid":"E111",   "color":"#F182BC" },
+            {   "eid":"E092",   "color":"#C58DAA" },            {   "eid":"E085",   "color":"#C58DAA" },
+            {   "eid":"E084",   "color":"#C58DAA" },            {   "eid":"E109",   "color":"#C58DAA" },
+            {   "eid":"E106",   "color":"#C58DAA" },            {   "eid":"E075",   "color":"#C58DAA" },
+            {   "eid":"E101",   "color":"#C58DAA" },            {   "eid":"E102",   "color":"#C58DAA" },
+            {   "eid":"E110",   "color":"#C58DAA" },            {   "eid":"E077",   "color":"#C58DAA" },
+            {   "eid":"E079",   "color":"#C58DAA" },            {   "eid":"E094",   "color":"#C58DAA" },
+            {   "eid":"E099",   "color":"#999999" },            {   "eid":"E086",   "color":"#999999" },
+            {   "eid":"E088",   "color":"#999999" },            {   "eid":"E097",   "color":"#999999" },
+            {   "eid":"E087",   "color":"#999999" },            {   "eid":"E080",   "color":"#999999" },
+            {   "eid":"E091",   "color":"#999999" },            {   "eid":"E066",   "color":"#999999" },
+            {   "eid":"E098",   "color":"#999999" },            {   "eid":"E096",   "color":"#999999" },
+            {   "eid":"E113",   "color":"#999999" },            {   "eid":"E114",   "color":"#000000" },
+            {   "eid":"E115",   "color":"#000000" },            {   "eid":"E116",   "color":"#000000" },
+            {   "eid":"E117",   "color":"#000000" },            {   "eid":"E118",   "color":"#000000" },
+            {   "eid":"E119",   "color":"#000000" },            {   "eid":"E120",   "color":"#000000" },
+            {   "eid":"E121",   "color":"#000000" },            {   "eid":"E122",   "color":"#000000" },
+            {   "eid":"E123",   "color":"#000000" },            {   "eid":"E124",   "color":"#000000" },
+            {   "eid":"E125",   "color":"#000000" },            {   "eid":"E126",   "color":"#000000" },
+            {   "eid":"E127",   "color":"#000000" },            {   "eid":"E128",   "color":"#000000" },
+            {   "eid":"E129",   "color":"#000000" },
+            {   "eid":"IMR90_Cell_Line",   "color":"#E41A1C" },
+            {   "eid":"ES-I3_Cell_Line",   "color":"#924965" },
+            {   "eid":"ES-WA7_Cell_Line",   "color":"#924965" },
+            {   "eid":"H1_Cell_Line",   "color":"#924965" },
+            {   "eid":"H9_Cell_Line",   "color":"#924965" },
+            {   "eid":"HUES1_Cell_Line",   "color":"#924965" },
+            {   "eid":"HUES13_Cell_Line",   "color":"#924965" },
+            {   "eid":"HUES28_Cell_Line",   "color":"#924965" },
+            {   "eid":"HUES3_Cell_Line",   "color":"#924965" },
+            {   "eid":"HUES44_Cell_Line",   "color":"#924965" },
+            {   "eid":"HUES45_Cell_Line",   "color":"#924965" },
+            {   "eid":"HUES48_Cell_Line",   "color":"#924965" },
+            {   "eid":"HUES49_Cell_Line",   "color":"#924965" },
+            {   "eid":"HUES53_Cell_Line",   "color":"#924965" },
+            {   "eid":"HUES6_Cell_Line",   "color":"#924965" },
+            {   "eid":"HUES62_Cell_Line",   "color":"#924965" },
+            {   "eid":"HUES63_Cell_Line",   "color":"#924965" },
+            {   "eid":"HUES64_Cell_Line",   "color":"#924965" },
+            {   "eid":"HUES65_Cell_Line",   "color":"#924965" },
+            {   "eid":"HUES66_Cell_Line",   "color":"#924965" },
+            {   "eid":"HUES8_Cell_Line",   "color":"#924965" },
+            {   "eid":"HUES9_Cell_Line",   "color":"#924965" },
+            {   "eid":"UCSF-4star",   "color":"#924965" },
+            {   "eid":"iPS_DF_19.11_Cell_Line",   "color":"#69608A" },
+            {   "eid":"iPS_DF_19.7_Cell_Line",   "color":"#69608A" },
+            {   "eid":"iPS_DF_4.7_Cell_Line",   "color":"#69608A" },
+            {   "eid":"iPS_DF_6.9_Cell_Line",   "color":"#69608A" },
+            {   "eid":"iPS-11a_Cell_Line",   "color":"#69608A" },
+            {   "eid":"iPS-11b_Cell_Line",   "color":"#69608A" },
+            {   "eid":"iPS-11c_Cell_Line",   "color":"#69608A" },
+            {   "eid":"iPS-15b_Cell_Line",   "color":"#69608A" },
+            {   "eid":"iPS-17a_Cell_Line",   "color":"#69608A" },
+            {   "eid":"iPS-17b_Cell_Line",   "color":"#69608A" },
+            {   "eid":"iPS-18_Cell_Line",   "color":"#69608A" },
+            {   "eid":"iPS-20b_Cell_Line",   "color":"#69608A" },
+            {   "eid":"iPS-27b_Cell_Line",   "color":"#69608A" },
+            {   "eid":"iPS-27e_Cell_Line",   "color":"#69608A" },
+            {   "eid":"H1_BMP4_Derived_Mesendoderm_Cultured_Cells",   "color":"#4178AE" },
+            {   "eid":"H1_BMP4_Derived_Trophoblast_Cultured_Cells",   "color":"#4178AE" },
+            {   "eid":"H1_Derived_Embryoid_Body_Cultured_Cells",   "color":"#4178AE" },
+            {   "eid":"H1_Derived_Mesenchymal_Stem_Cells",   "color":"#4178AE" },
+            {   "eid":"H1_Derived_Neuronal_Progenitor_Cultured_Cells",   "color":"#4178AE" },
+            {   "eid":"H9_Derived_Embryoid_Body_Cultured_Cells",   "color":"#4178AE" },
+            {   "eid":"H9_Derived_Neuron_Cultured_Cells",   "color":"#4178AE" },
+            {   "eid":"H9_Derived_Neuronal_Progenitor_Cultured_Cells",   "color":"#4178AE" },
+            {   "eid":"hESC_Derived_CD184+_Endoderm_Cultured_Cells",   "color":"#4178AE" },
+            {   "eid":"hESC_Derived_CD56+_Ectoderm_Cultured_Cells",   "color":"#4178AE" },
+            {   "eid":"hESC_Derived_CD56+_Mesoderm_Cultured_Cells",   "color":"#4178AE" },
+            {   "eid":"HUES1_Derived_Embryoid_Body_Cultured_Cells",   "color":"#4178AE" },
+            {   "eid":"HUES3_Derived_Embryoid_Body_Cultured_Cells",   "color":"#4178AE" },
+            {   "eid":"HUES45_Derived_Embryoid_Body_Cultured_Cells",   "color":"#4178AE" },
+            {   "eid":"HUES6_Derived_Embryoid_Body_Cultured_Cells",   "color":"#4178AE" },
+            {   "eid":"CD3_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"CD4_Memory_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"CD4_Naive_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"CD4_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"CD4+_CD25-_CD45RA+_Naive_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"CD4+_CD25-_CD45RO+_Memory_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"CD4+_CD25-_IL17-_PMA-Ionomycin_stimulated_MACS_purified_Th_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"CD4+_CD25-_IL17+_PMA-Ionomcyin_stimulated_Th17_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"CD4+_CD25-_Th_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"CD4+_CD25+_CD127-_Treg_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"CD4+_CD25int_CD127+_Tmem_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"CD8_Memory_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"CD8_Naive_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"CD8_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"Mobilized_CD3_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"Mobilized_CD4_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"Mobilized_CD8_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"Peripheral_Blood_Mononuclear_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"Th17_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"Treg_Primary_Cells",   "color":"#55A354" },
+            {   "eid":"CD14_Primary_Cells",   "color":"#678C69" },
+            {   "eid":"CD15_Primary_Cells",   "color":"#678C69" },
+            {   "eid":"CD19_Primary_Cells",   "color":"#678C69" },
+            {   "eid":"CD20_Primary_Cells",   "color":"#678C69" },
+            {   "eid":"CD34_Cultured_Cells",   "color":"#678C69" },
+            {   "eid":"CD34_Primary_Cells",   "color":"#678C69" },
+            {   "eid":"CD56_Primary_Cells",   "color":"#678C69" },
+            {   "eid":"Mobilized_CD34_Primary_Cells",   "color":"#678C69" },
+            {   "eid":"Mobilized_CD56_Primary_Cells",   "color":"#678C69" },
+            {   "eid":"Adipose_Derived_Mesenchymal_Stem_Cell_Cultured_Cells",   "color":"#B65C73" },
+            {   "eid":"Bone_Marrow_Derived_Mesenchymal_Stem_Cell_Cultured_Cells",   "color":"#B65C73" },
+            {   "eid":"Chondrocytes_from_Bone_Marrow_Derived_Mesenchymal_Stem_Cell_Cultured_Cells",   "color":"#B65C73" },
+            {   "eid":"Mesenchymal_Stem_Cell_Derived_Adipocyte_Cultured_Cells",   "color":"#B65C73" },
+            {   "eid":"Placenta_Chorion_Smooth",   "color":"#B65C73" },
+            {   "eid":"Placenta_Villi",   "color":"#B65C73" },
+            {   "eid":"Muscle_Satellite_Cultured_Cells",   "color":"#E67326" },
+            {   "eid":"Breast_Fibroblast_Primary_Cells",   "color":"#FF9D0C" },
+            {   "eid":"Breast_Luminal_Epithelial_Cells",   "color":"#FF9D0C" },
+            {   "eid":"Breast_Myoepithelial_Cells",   "color":"#FF9D0C" },
+            {   "eid":"Breast_vHMEC",   "color":"#FF9D0C" },
+            {   "eid":"Fetal_Skin",   "color":"#FF9D0C" },
+            {   "eid":"Penis_Foreskin_Fibroblast_Primary_Cells",   "color":"#FF9D0C" },
+            {   "eid":"Penis_Foreskin_Keratinocyte_Primary_Cells",   "color":"#FF9D0C" },
+            {   "eid":"Penis_Foreskin_Melanocyte_Primary_Cells",   "color":"#FF9D0C" },
+            {   "eid":"Neurosphere_Cultured_Cells_Cortex_Derived",   "color":"#FFD924" },
+            {   "eid":"Neurosphere_Cultured_Cells_Ganglionic_Eminence_Derived",   "color":"#FFD924" },
+            {   "eid":"Fetal_Thymus",   "color":"#DAB92E" },
+            {   "eid":"Thymus",   "color":"#DAB92E" },
+            {   "eid":"Brain_Angular_Gyrus",   "color":"#C5912B" },
+            {   "eid":"Brain_Anterior_Caudate",   "color":"#C5912B" },
+            {   "eid":"Brain_Cerebellum",   "color":"#C5912B" },
+            {   "eid":"Brain_Cingulate_Gyrus",   "color":"#C5912B" },
+            {   "eid":"Brain_Germinal_Matrix",   "color":"#C5912B" },
+            {   "eid":"Brain_Hippocampus_Middle",   "color":"#C5912B" },
+            {   "eid":"Brain_Inferior_Temporal_Lobe",   "color":"#C5912B" },
+            {   "eid":"Brain_Mid_Frontal_Lobe",   "color":"#C5912B" },
+            {   "eid":"Brain_Substantia_Nigra",   "color":"#C5912B" },
+            {   "eid":"Fetal_Brain",   "color":"#C5912B" },
+            {   "eid":"Adipose_Nuclei",   "color":"#AF5B39" },
+            {   "eid":"Adipose_Tissue",   "color":"#AF5B39" },
+            {   "eid":"Fetal_Muscle_Arm",   "color":"#C2655D" },
+            {   "eid":"Fetal_Muscle_Back",   "color":"#C2655D" },
+            {   "eid":"Fetal_Muscle_Leg",   "color":"#C2655D" },
+            {   "eid":"Fetal_Muscle_Lower_Limb_Skeletal",   "color":"#C2655D" },
+            {   "eid":"Fetal_Muscle_Trunk",   "color":"#C2655D" },
+            {   "eid":"Fetal_Muscle_Upper_Limb_Skeletal",   "color":"#C2655D" },
+            {   "eid":"Fetal_Muscle_Upper_Trunk",   "color":"#C2655D" },
+            {   "eid":"Psoas_Muscle",   "color":"#C2655D" },
+            {   "eid":"Skeletal_Muscle",   "color":"#C2655D" },
+            {   "eid":"Aorta",   "color":"#D56F80" },
+            {   "eid":"Fetal_Heart",   "color":"#D56F80" },
+            {   "eid":"Heart",   "color":"#D56F80" },
+            {   "eid":"Left_Ventricle",   "color":"#D56F80" },
+            {   "eid":"Right_Atrium",   "color":"#D56F80" },
+            {   "eid":"Right_Ventricle",   "color":"#D56F80" },
+            {   "eid":"Colon_Smooth_Muscle",   "color":"#F182BC" },
+            {   "eid":"Duodenum_Smooth_Muscle",   "color":"#F182BC" },
+            {   "eid":"Rectal_Smooth_Muscle",   "color":"#F182BC" },
+            {   "eid":"Stomach_Smooth_Muscle",   "color":"#F182BC" },
+            {   "eid":"Colonic_Mucosa",   "color":"#C58DAA" },
+            {   "eid":"Duodenum_Mucosa",   "color":"#C58DAA" },
+            {   "eid":"Esophagus",   "color":"#C58DAA" },
+            {   "eid":"Fetal_Intestine_Large",   "color":"#C58DAA" },
+            {   "eid":"Fetal_Intestine_Small",   "color":"#C58DAA" },
+            {   "eid":"Fetal_Stomach",   "color":"#C58DAA" },
+            {   "eid":"Gastric",   "color":"#C58DAA" },
+            {   "eid":"Rectal_Mucosa",   "color":"#C58DAA" },
+            {   "eid":"Sigmoid_Colon",   "color":"#C58DAA" },
+            {   "eid":"Small_Intestine",   "color":"#C58DAA" },
+            {   "eid":"Stomach_Mucosa",   "color":"#C58DAA" },
+            {   "eid":"Adrenal_Gland",   "color":"#999999" },
+            {   "eid":"Adult_Kidney",   "color":"#999999" },
+            {   "eid":"Adult_Liver",   "color":"#999999" },
+            {   "eid":"Fetal_Adrenal_Gland",   "color":"#999999" },
+            {   "eid":"Fetal_Kidney",   "color":"#999999" },
+            {   "eid":"Fetal_Kidney_Left",   "color":"#999999" },
+            {   "eid":"Fetal_Kidney_Right",   "color":"#999999" },
+            {   "eid":"Fetal_Lung",   "color":"#999999" },
+            {   "eid":"Fetal_Lung_Left",   "color":"#999999" },
+            {   "eid":"Fetal_Lung_Right",   "color":"#999999" },
+            {   "eid":"Fetal_Ovary",   "color":"#999999" },
+            {   "eid":"Fetal_Placenta",   "color":"#999999" },
+            {   "eid":"Fetal_Renal_Cortex",   "color":"#999999" },
+            {   "eid":"Fetal_Renal_Cortex_Left",   "color":"#999999" },
+            {   "eid":"Fetal_Renal_Cortex_Right",   "color":"#999999" },
+            {   "eid":"Fetal_Renal_Pelvis",   "color":"#999999" },
+            {   "eid":"Fetal_Renal_Pelvis_Left",   "color":"#999999" },
+            {   "eid":"Fetal_Renal_Pelvis_Right",   "color":"#999999" },
+            {   "eid":"Fetal_Spleen",   "color":"#999999" },
+            {   "eid":"Lung",   "color":"#999999" },
+            {   "eid":"Ovary",   "color":"#999999" },
+            {   "eid":"Pancreas",   "color":"#999999" },
+            {   "eid":"Pancreatic_Islets",   "color":"#999999" },
+            {   "eid":"Placenta_Amnion",   "color":"#999999" },
+            {   "eid":"Spleen",   "color":"#999999" },
+            {   "eid":"Bladder",   "color":"#CCFFFF" },
+            {   "eid":"Breast_Stem_Cells",   "color":"#CCFFFF" },
+            {   "eid":"Fetal_Spinal_Cord",   "color":"#CCFFFF" },
+            {   "eid":"Fetal_Testes",   "color":"#CCFFFF" },
+            {   "eid":"Primary_Fibroblast_Cell_Line",   "color":"#CCFFFF" },
+            {   "eid":"Testis_Spermatozoa_Primary_Cells",   "color":"#CCFFFF" },
+        ];
 
         // setCookie: Original JavaScript code by Chirp Internet: www.chirp.com.au
         function setCookie(name, value) {
@@ -92,6 +360,10 @@
         }        
         /////////////////////////
 
+        function remove_special_chrs( str ) {
+            return str.replace(/[^\w\s]/gi, "").replace(/_/g,"");
+        }
+
         function load_files() {
             dirRoot = document.getElementById("root-dir").value.trim();
             urlRoot = document.getElementById("root-url").value.trim();
@@ -100,17 +372,19 @@
             document.getElementById("source").options.length = 0;
             document.getElementById("dest").options.length = 0;
 
-            // check if dirRoot is valid directory (preventing injection hacking)
+            // check if dirRoot is valid directory (preventing hacking)
             var re = new RegExp('^[a-zA-Zа-яА-Я0-9_!/]+$')
             if ( !dirRoot.match( re ) ) {
                 alert( "Irregular characters in root directory!");
                 return;
             }
-            //alert(dirRoot + " " + urlRoot);
 
             // set cookie
             setCookie( "rootdir", dirRoot );
             setCookie( "rooturl", urlRoot );
+
+            var filter_text = document.getElementById("filter-text").value;
+            setCookie( "filtertext", filter_text );
 
             // get list of all files
             var req = new XMLHttpRequest();
@@ -149,7 +423,6 @@
 
                             listbox.options.add(opt);
                         }
-
                         
                     }
                 }
@@ -160,11 +433,14 @@
             req.send(dirRoot);
         }
 
+
         $(document).ready(function($) {
             document.getElementById("root-dir").value = getCookie("rootdir");
             document.getElementById("root-url").value = getCookie("rooturl");
             document.getElementById("ref-genome").value = getCookie("refgenome");
+            document.getElementById("filter-text").value = getCookie("filtertext");
         });
+
     </script>
 
     <title>Visualizer</title>
@@ -194,7 +470,7 @@
     <li>Double-click</li>
     </ul>
     
-    <input type="text" size="50" id="filter-text" placeholder="Filter..." />
+    <input type="text" size="50" id="filter-text" placeholder="Filter..." onkeyup="filter_source()" />
     <br><br>
     <select id="source" size=30 width=500 multiple onkeypress="return onkeypress_source(event)" ondblclick="listbox_moveacross('source', 'dest')">    </select>
     <br><br>
@@ -289,14 +565,48 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
     
     <textarea id="text-area" style="white-space: pre; word-wrap: normal; width: 700; height: 500"></textarea>
     <br><br>
+
     <input type="text" size="30" id="ref-genome" placeholder="Ref. genome (hg19, mm9, ...)" /> &nbsp;
     <button onclick="visualize()"><b>Visualize</b></button> &nbsp;
     <br><br>
 
-    <text id="text_json_url"></text><br>
+    <text id="text_json_url"></text>
+    <br><br>
 
+    <b>Color table for epigenome IDs and assays (including histones).</b><br>
+    Overrides track colors if genome data file name contains epigenome IDs or assay names (ignoring all non-letter characters)<br>
+    Colors for epigenome IDs come from <a href="https://docs.google.com/spreadsheets/d/1yikGx4MsO9Ei36b64yOy9Vb6oPC5IBGlFbYEt-N6gOM/edit#gid=15" target="_blank">Roadmap Epigenomics Metadata Sheets</a>
+
+    <br><br>
+
+    <div id="color-table">test</div>
 
     <script>
+    
+        function create_color_table() {
+
+            // assay color table
+            var html = "<table border='1'><thead><tr><th>Assay</th><th>Hex Code</th><th>Color</th></tr></thead><tbody>";
+            for(var j = 0; j < data_assay.length; j++) {
+                var elem = data_assay[j];
+                html = html + "<tr><td>"+elem.name+"</td><td>"+elem.color+"</td><td bgcolor='"+elem.color+"'></td></tr>";
+            }               
+            html = html + "</tbody></table>" + "<br><br>";
+
+            // epigenome id color table
+            html = html + "<table border='1'><thead><tr><th>Epigenome ID</th><th>Hex Code</th><th>Color</th></tr></thead><tbody>";
+            for(var j = 0; j < data_eid.length; j++) {
+                var elem = data_eid[j];
+                html = html + "<tr><td>"+elem.eid+"</td><td>"+elem.color+"</td><td bgcolor='"+elem.color+"'></td></tr>";
+            }
+            html = html + "</tbody></table>";
+
+            
+            document.getElementById("color-table").innerHTML = html;
+        }    
+
+        create_color_table();
+
         function baseName(str)
         {
            var base = new String(str).substring(str.lastIndexOf('/') + 1); 
@@ -415,12 +725,12 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
             }
         }
 
-        $("#filter-text").keyup(function() {
-            var searchString = $(this).val().toLowerCase();
-            //console.log("filter: " + searchString);
+        function filter_source() {
+            var searchString = document.getElementById("filter-text").value.toLowerCase();
+            
             var $opts = $("#source").find("option");
             $opts.each(function() {
-                var text = $(this).text().toLowerCase();
+                var text = $(this).text().toLowerCase().trim();
                 //found a match - show this entry
                 if (searchString == "" || text.indexOf(searchString) > -1) {                    
                     //console.log("O: ", text);                    
@@ -430,7 +740,7 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
                     $(this).hide();
                 }                
             });
-        });
+        }
 
         function prepare() {
             var listbox = document.getElementById("dest");
@@ -471,6 +781,31 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
                     color = "#000000"; // black
                 }
 
+                // remove special characters from filename
+                lowercase = remove_special_chrs( lowercase );
+
+                // override color for epigenome id (EID)
+                for(var j = 0; j < data_eid.length; j++) {
+                    var elem = data_eid[j];
+                    var eid = remove_special_chrs( elem.eid.toLowerCase() );
+
+                    if ( lowercase.indexOf( eid ) > -1 ) { // if filename contains EID
+                        color = elem.color;
+                        break;
+                    }
+                }
+
+                // override color for assay (or histone)
+                for(var j = 0; j < data_assay.length; j++) {
+                    var elem = data_assay[j];
+                    var assay = remove_special_chrs( elem.name.toLowerCase() );
+
+                    if ( lowercase.indexOf( assay ) > -1 ) { // if filename contains assay or histone name
+                        color = elem.color;
+                        break;
+                    }
+                }
+
                 text = text + type + "," + color + "," + name + "," + opt.value + "\n";
             }            
 
@@ -504,12 +839,13 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
                 var name = type_color_name_url[2];
                 var url = type_color_name_url[3];
 
-                var obj = null;
-
                 // color                
                 var pr = hex_to_rgb(color).r;
                 var pg = hex_to_rgb(color).g;
                 var pb = hex_to_rgb(color).b;
+
+                // create null json object
+                var obj = null;
 
                 switch( type ) {
 
@@ -586,6 +922,7 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
                         break;                    
                 }
 
+                // by default, track name is filename
                 obj.name = name;
 
                 json.push( obj );
