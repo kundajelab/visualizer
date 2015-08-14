@@ -1,5 +1,6 @@
 ### For Kundaje lab members
 
+```
 # Visualizer web page: http://mitra.stanford.edu/kundaje/leepc12/visualizer
   Usage: 
   1) Fill in 'Root directory' and 'Root URL' fields in the top of the web page.
@@ -14,3 +15,4 @@
 # Resursive data type converter (including sorting and indexing bam and bed type files)
   Usage:
   /srv/www/kundaje/leepc12/visualizer/converter/recursive_gen_idx.sh [TARGET DIRECTORY]
+```
