@@ -12,7 +12,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 
     <script>
-
         var wubrowser_url   = "http://epigenomegateway.wustl.edu/browser/";
         var tmp_json_url    = "http://mitra.stanford.edu/kundaje/leepc12/web_portal_cache/";
         var width_trackname     = 150;
@@ -78,6 +77,21 @@
           {    "stateno":15,    "mnemonics":"Quies",    "desc":"Quiescent/Low",    "color":"White",    "rgb":"255,255,255",    "hex":"#FFFFFF"  }
         ];        
 
+        // setCookie: Original JavaScript code by Chirp Internet: www.chirp.com.au
+        function setCookie(name, value) {
+            var today = new Date();
+            var expiry = new Date(today.getTime() + 30 * 24 * 3600 * 1000); // plus 30 days
+            document.cookie=name + "=" + escape(value) + "; path=/; expires=" + expiry.toGMTString();
+        }       
+
+        // getCookie: Original JavaScript code by Chirp Internet: www.chirp.com.au
+        function getCookie(name) {
+            var re = new RegExp(name + "=([^;]+)");
+            var value = re.exec(document.cookie);
+            return (value != null) ? unescape(value[1]) : null;
+        }        
+        /////////////////////////
+
         function load_files() {
             dirRoot = document.getElementById("root-dir").value.trim();
             urlRoot = document.getElementById("root-url").value.trim();
@@ -93,6 +107,10 @@
                 return;
             }
             //alert(dirRoot + " " + urlRoot);
+
+            // set cookie
+            setCookie( "rootdir", dirRoot );
+            setCookie( "rooturl", urlRoot );
 
             // get list of all files
             var req = new XMLHttpRequest();
@@ -143,6 +161,8 @@
         }
 
         $(document).ready(function($) {
+            document.getElementById("root-dir").value = getCookie("rootdir");
+            document.getElementById("root-url").value = getCookie("rooturl");
         });
     </script>
 
@@ -155,11 +175,11 @@
     <br><br>
 
     <b>Root directory: (recursively find all genome data files under it) </b><br>
-    <input type="text" size="100" id="root-dir" placeholder="Root directory..." />
+    <input type="text" size="100" id="root-dir" name="root-dir" placeholder="Root directory..." />
     <br><br>
 
     <b>Root URL: (corresponding URL for the root directory)</b><br>
-    <input type="text" size="100" id="root-url" placeholder="Root URL..." />
+    <input type="text" size="100" id="root-url" name="root-url" placeholder="Root URL..." />
     <br><br>
 
     <button onclick="load_files()">Load genome data files</button>
@@ -192,8 +212,10 @@
     <br><br>
 
     <button onclick="prepare()"><b>Prepare</b></button> &nbsp;
+<!--
     <button onclick="listbox_move('dest', 'up')">Move up</button> &nbsp;
     <button onclick="listbox_move('dest', 'down')">Move down</button> &nbsp;
+-->
     <button onclick="listbox_selectall('dest', true)">Select all</button> &nbsp;
     <button onclick="listbox_selectall('dest', false)">Select none</button>
     <br><br>
@@ -582,7 +604,6 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
 
             var json_str = JSON.stringify(json);
 
-//alert( json_str );
             // save json at tmp_json_url
             req.open('POST', 'http://'+location.hostname+'/cgi-bin/writejson', true);
             req.setRequestHeader("Content-type","application/x-www-form-urlencoded");
