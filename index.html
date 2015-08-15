@@ -833,6 +833,8 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
             var lines = textarea.value.split("\n");
             var json = JSON.parse(JSON.stringify(data_wubrowser_json_base));
 
+            var found_undef_type = false;
+
             for(var i = 0; i < lines.length; i++) {
                 var line = lines[i];
 
@@ -926,7 +928,17 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
                                 "qtc": { "summeth":2,
                                     "fontsize":"0pt","fontfamily":"sans-serif",
                                      "nr": pr, "ng": pg, "nb": pb, } };
-                        break;                    
+                        break;
+
+                    default:
+                        obj = { "type": "undefined" };
+                        break;
+                }
+
+                // ignore undefined tracks
+                if ( obj.type == "undefined" ) {
+                    found_undef_type = true;
+                    continue;
                 }
 
                 // by default, track name is filename
@@ -934,6 +946,10 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
 
                 json.push( obj );
             }            
+
+            if ( found_undef_type ) {
+                alert("Tracks with unsupported (undefined) type were found and ignored.")
+            }
 
             // save json in file system and send it to genome browser
             var req= new XMLHttpRequest();
