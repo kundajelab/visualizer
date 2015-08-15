@@ -379,6 +379,11 @@
                 return;
             }
 
+            if ( !dirRoot.startsWith( "/srv/www" ) && !dirRoot.startsWith( "/var/www" ) ) {
+                alert( "Root directory should start with /srv/www or /var/www!");
+                return;
+            }
+
             // set cookie
             setCookie( "rootdir", dirRoot );
             setCookie( "rooturl", urlRoot );
