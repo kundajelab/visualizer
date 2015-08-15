@@ -388,9 +388,6 @@
             setCookie( "rootdir", dirRoot );
             setCookie( "rooturl", urlRoot );
 
-            var filter_text = document.getElementById("filter-text").value;
-            setCookie( "filtertext", filter_text );
-
             // get list of all files
             var req = new XMLHttpRequest();
             req.onreadystatechange = function() {
@@ -444,6 +441,7 @@
             document.getElementById("root-url").value = getCookie("rooturl");
             document.getElementById("ref-genome").value = getCookie("refgenome");
             document.getElementById("filter-text").value = getCookie("filtertext");
+            document.getElementById("filter-text2").value = getCookie("filtertext2");
         });
 
     </script>
@@ -474,8 +472,9 @@
     <li>Click "Move down" button</li>
     <li>Double-click</li>
     </ul>
-    
-    <input type="text" size="50" id="filter-text" placeholder="Filter..." onkeyup="filter_source()" />
+
+    <input type="text" size="50" id="filter-text" placeholder="Filter... (case-sensitive)" onkeyup="filter_source()" /> &nbsp; AND &nbsp;
+    <input type="text" size="50" id="filter-text2" placeholder="Filter2... (case-sensitive)" onkeyup="filter_source()" />
     <br><br>
     <select id="source" size=30 width=500 multiple onkeypress="return onkeypress_source(event)" ondblclick="listbox_moveacross('source', 'dest')">    </select>
     <br><br>
@@ -733,17 +732,20 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
         }
 
         function filter_source() {
-            var searchString = document.getElementById("filter-text").value.toLowerCase();
+            var searchString = document.getElementById("filter-text").value;
+            var searchString2 = document.getElementById("filter-text2").value;
+
+            setCookie( "filtertext", searchString );
+            setCookie( "filtertext2", searchString2 );
             
             var $opts = $("#source").find("option");
             $opts.each(function() {
                 var text = $(this).text().toLowerCase().trim();
                 //found a match - show this entry
-                if (searchString == "" || text.indexOf(searchString) > -1) {                    
-                    //console.log("O: ", text);                    
+                if ( (searchString == "" || text.indexOf(searchString) > -1) &&
+                     (searchString2 == "" || text.indexOf(searchString2) > -1) ) {
                     $(this).show();
                 } else {
-                    //console.log("X: ", text);
                     $(this).hide();
                 }                
             });
