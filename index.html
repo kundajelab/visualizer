@@ -11,13 +11,16 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 
-    <script>
+    <script type="text/javascript">
+
+    ////////// modify it for your own web server ///////////////
         var wubrowser_url   = "http://epigenomegateway.wustl.edu/browser/";
         var tmp_json_url    = "http://mitra.stanford.edu/kundaje/leepc12/web_portal_cache/";
-        var width_trackname     = 150;
+        var width_trackname     = 150; // track name width
+    ////////////////////////////////////////////////////////////
 
-        var dirRoot = "";
-        var urlRoot = "";
+        var root_dir = "";
+        var root_url = "";
 
         var data_wubrowser_json_base = 
         [
@@ -360,291 +363,13 @@
         }        
         /////////////////////////
 
-        function show_help() {
-            var chkbox = document.getElementById("chkbox_show_help");
-            if ( chkbox.checked ) {
-                $(".help-text").css( "display", "block" );
-                setCookie( "showhelp", "true" );
-            }
-            else {
-                $(".help-text").css( "display", "none" );
-                setCookie( "showhelp", "false" );
-            }
-        }
-
         function remove_special_chrs( str ) {
             return str.replace(/[^\w\s]/gi, "").replace(/_/g,"");
         }
 
-        function load_files() {
-            dirRoot = document.getElementById("root-dir").value.trim();
-            urlRoot = document.getElementById("root-url").value.trim();
-
-            // empty both boxes
-            document.getElementById("source").options.length = 0;
-            document.getElementById("dest").options.length = 0;
-
-            // check if dirRoot is valid directory (preventing hacking)
-            var re = new RegExp('^[a-zA-Zа-яА-Я0-9_!/]+$')
-            if ( !dirRoot.match( re ) ) {
-                alert( "Irregular characters in root directory!");
-                return;
-            }
-
-            if ( !dirRoot.startsWith( "/srv/www" ) && !dirRoot.startsWith( "/var/www" ) ) {
-                alert( "Root directory should start with /srv/www or /var/www!");
-                return;
-            }
-
-            // set cookie
-            setCookie( "rootdir", dirRoot );
-            setCookie( "rooturl", urlRoot );
-
-            // get list of all files
-            var req = new XMLHttpRequest();
-            req.onreadystatechange = function() {
-                if (req.readyState == 4 && req.status == 200) {
-                    var t = req.responseText;
-                    if (t.substr(0, 5) == 'ERROR') {
-                        alert('Failed to post data to server (error in cgi-bin app (getfiles)?)' + t, 3);
-                    } else {
-
-                        document.getElementById("text_dir_root").innerHTML= "<b>Genome data files found on the file system ("+dirRoot+")</b>";
-
-                        var listbox = document.getElementById( "source" );
-
-                        //console.log(t);
-                        
-                        var files = t.split("\n");
-
-                        for(var i = 0; i < files.length; i++ ) {
-                            var file = files[i];
-
-                            if ( file=="" ) {
-                                continue;
-                            }
-
-                            if ( file.endsWith(".tbi") ) {
-                                file = file.replace(".tbi","");
-                            }
-                            else if ( file.endsWith(".bai") ) {
-                                file = file.replace(".bai","");
-                            }
-
-                            var opt = document.createElement("option");
-                            opt.text = file.replace( dirRoot, "" );
-                            opt.value = file.replace( dirRoot, urlRoot);
-
-                            listbox.options.add(opt);
-                        }
-                        
-                    }
-                }
-            };
-
-            req.open('POST', 'http://' + location.hostname + '/cgi-bin/getfiles', true);
-            req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            req.send(dirRoot);
-        }
-
-
-        $(document).ready(function($) {
-            document.getElementById("root-dir").value = getCookie("rootdir");
-            document.getElementById("root-url").value = getCookie("rooturl");
-            document.getElementById("ref-genome").value = getCookie("refgenome");
-            document.getElementById("filter-text").value = getCookie("filtertext");
-            document.getElementById("filter-text2").value = getCookie("filtertext2");
-
-            if ( getCookie("showhelp") == "true" ) {
-                document.getElementById("chkbox_show_help").checked = true;
-            }
-            else {
-                document.getElementById("chkbox_show_help").checked = false;
-            }
-
-            show_help();
-        });
-
-    </script>
-
-    <title>Visualizer</title>
-</head>
-
-
-<body>
-    <h1>Genome data visualizer</h1>
-    <br>
-    <input type="checkbox" id="chkbox_show_help" onclick="show_help()"> Show help</input>
-    <br><br>
-
-    <b>Root directory: (recursively find all genome data files under it) </b><br>
-    <input type="text" size="100" id="root-dir" name="root-dir" placeholder="Root directory..." />
-    <br><br>
-
-    <b>Root URL: (corresponding URL for the root directory)</b><br>
-    <input type="text" size="100" id="root-url" name="root-url" placeholder="Root URL..." />
-    <br><br>
-
-    <button onclick="load_files()"><b>Load genome data files</b></button>
-    <br><br><br>
-
-    <text id="text_dir_root"><b>Genome data files found on your file system under </b></text><br>
-
-    <div class="help-text" style="display:none">
-        To move selected items down to the next box:
-        <ul style="list-style-type:circle"> 
-        <li>Type 'a' key</li>
-        <li>Click "Move down" button</li>
-        <li>Double-click</li>
-        </ul>
-    </div>
-
-    <input type="text" size="50" id="filter-text" placeholder="Filter... (case-sensitive)" onkeyup="filter_source()" /> &nbsp; AND &nbsp;
-    <input type="text" size="50" id="filter-text2" placeholder="Filter2... (case-sensitive)" onkeyup="filter_source()" />
-    <br><br>
-    <select id="source" size=30 width=500 multiple onkeypress="return onkeypress_source(event)" ondblclick="listbox_moveacross('source', 'dest')">    </select>
-    <br><br>
-
-    <button onclick="listbox_moveacross('source', 'dest')"><b>Move down</b></button> &nbsp;
-    <button onclick="listbox_moveacross('dest', 'source')"><b>Move up</b></button>
-    <br><br>
-
-    <b>Genome data files chosen</b><br>
-
-    <div class="help-text" style="display:none">
-        To move selected items up to the previous box:
-        <ul style="list-style-type:circle"> 
-        <li>Type 'a' key</li>
-        <li>Click "Move up" button</li>
-        <li>Double-click</li>
-        </ul>
-    </div>
-    <select id="dest" size=30 width=500 multiple onkeypress="return onkeypress_dest(event)" ondblclick="listbox_moveacross('dest', 'source')">    </select>
-    <br><br>
-
-    <button onclick="prepare()"><b>Prepare</b></button> &nbsp;
-    <button onclick="listbox_selectall('dest', true)">Select all</button> &nbsp;
-    <button onclick="listbox_selectall('dest', false)">Select none</button>
-    <br><br>
-
-    <b>Specify track details (format: type,hex_color,name,URL) </b><br>
-
-    <div class="help-text" style="display:none">
-        -type: type of a track (don't leave it undefined)</b><br>
-        <ul style="list-style-type:circle">
-            <li> bigwig : automatic scaling </li>
-            <li> bigwig1 : fixed scaling, summary method = max (min:0 ~ max:40) </li>
-            <li> bigwig2 : fixed scaling, summary method = max (min:0 ~ max:200) </li>
-            <li> bigwig3 : fixed scaling, summary method = max (min:-40 ~ max:0) </li>
-            <li> bam </li>
-            <li> interaction : arc shaped interaction between two genome coords. <br>
-                <ul style="list-style-type:circle">
-                    Example: 6-column bed ( chr? \t start \t end \t chr?:start-end,score \t uniq_id strand (./-/+) )
-            <pre>
-    chr10   81058000        81059400        chr10:81106225-81108225,0.395519        1       .
-    chr10   81059400        81060000        chr10:81106225-81108225,0.097934        101     .
-            </pre>
-                </ul>
-            </li>
-            <li> categorical15 : 15-state chromatin state map. 
-                <ul style="list-style-type:circle">
-                    Example: 4-column bed ( chr? \t start \t end \t chr_state_id (integer) )
-                    <pre>
-    chr1    0       9800    15
-    chr1    9800    10600   9        
-                    </pre>
-                </ul>
-
-                <ul style="list-style-type:circle">
-                    Add the following line to the edit box below for the chr. state map of epigenome E001 and E017 (for example).
-                    <pre>
-    categorical15,E001_chr15,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/coreMarks/jointModel/final/E001_15_coreMarks_stateno.bed.gz
-    categorical15,E017_chr15,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/coreMarks/jointModel/final/E017_15_coreMarks_stateno.bed.gz
-                    </pre>
-                </ul>
-
-            </li>
-            <li> categorical18 : 18-state chromatin state map. </li>
-
-                <ul style="list-style-type:circle">
-                    Add the following line to the edit box below for the chr. state map of epigenome E004 and E050 (for example).
-                    <pre>
-    categorical18,E004_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/core_K27ac/jointModel/final/E004_18_core_K27ac_stateno.bed.gz
-    categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/core_K27ac/jointModel/final/E050_18_core_K27ac_stateno.bed.gz
-                    </pre>
-                </ul>
-
-            <li> bed : 6-column bed.</li>
-            <li> hammock : WashU epg. browser specific type.</li>
-        </ul>
-
-        -color: hex color code (look for color hex codes at <a href="http://www.rapidtables.com/web/color/RGB_Color.htm" target="_blank">here</a>)
-        
-            <ul style="list-style-type:circle">
-                bam, bed and interaction types have their own colors (according to the strand of reads or the sign of scores).
-                <br><br>            
-                <li>bigwig : blue </li>
-                <li>bedGraph : maroon </li>
-                <li>hammock : red </li>
-            </ul>
-
-        -name: by default track name is its filename.
-        <br><br>
-        
-        <b>IMPORTANT! : Do not leave any "undefined" types in the text area below. Specify an appropriate type for them.</b><br>
-        track format: type,hex_color,name,URL
-        <br><br>
-    </div>
-    
-    <textarea id="text-area" style="white-space: pre; word-wrap: normal; width: 700; height: 500"></textarea>
-    <br><br>
-
-    <input type="text" size="30" id="ref-genome" placeholder="Ref. genome (hg19, mm9, ...)" /> &nbsp;
-    <button onclick="visualize()"><b>Visualize</b></button> &nbsp;
-    <br><br>
-
-    <text id="text_json_url"></text>
-    <br><br>
-
-    <div class="help-text" style="display:none">
-        <b>Color table for epigenome IDs and assays (including histones).</b><br>
-        Overrides track colors if genome data file name contains epigenome IDs or assay names (ignoring all non-letter characters)<br>
-        Colors for epigenome IDs come from <a href="https://docs.google.com/spreadsheets/d/1yikGx4MsO9Ei36b64yOy9Vb6oPC5IBGlFbYEt-N6gOM/edit#gid=15" target="_blank">Roadmap Epigenomics Metadata Sheets</a>
-        <br><br>
-        <div id="color-table">test</div>
-    </div>
-
-    <script>
-    
-        function create_color_table() {
-
-            // assay color table
-            var html = "<table border='1'><thead><tr><th>Assay</th><th>Hex Code</th><th>Color</th></tr></thead><tbody>";
-            for(var j = 0; j < data_assay.length; j++) {
-                var elem = data_assay[j];
-                html = html + "<tr><td>"+elem.name+"</td><td>"+elem.color+"</td><td bgcolor='"+elem.color+"'></td></tr>";
-            }               
-            html = html + "</tbody></table>" + "<br><br>";
-
-            // epigenome id color table
-            html = html + "<table border='1'><thead><tr><th>Epigenome ID</th><th>Hex Code</th><th>Color</th></tr></thead><tbody>";
-            for(var j = 0; j < data_eid.length; j++) {
-                var elem = data_eid[j];
-                html = html + "<tr><td>"+elem.eid+"</td><td>"+elem.color+"</td><td bgcolor='"+elem.color+"'></td></tr>";
-            }
-            html = html + "</tbody></table>";
-
-            
-            document.getElementById("color-table").innerHTML = html;
-        }    
-
-        create_color_table();
-
-        function baseName(str)
+        function get_basename(str)
         {
            var base = new String(str).substring(str.lastIndexOf('/') + 1); 
-            //if(base.lastIndexOf(".") != -1)       
-            //    base = base.substring(0, base.lastIndexOf("."));
            return base;
         }
 
@@ -662,7 +387,6 @@
             var b = parseInt( arr[2] );
             return "#" + component_to_hex(r) + component_to_hex(g) + component_to_hex(b);
         }
-
 
         function hex_to_rgb( hex ) // http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
         {
@@ -758,6 +482,111 @@
             }
         }
 
+        function show_help() {
+            var chkbox = document.getElementById("chkbox_show_help");
+            if ( chkbox.checked ) {
+                $(".help-text").css( "display", "block" );
+                setCookie( "showhelp", "true" );
+            }
+            else {
+                $(".help-text").css( "display", "none" );
+                setCookie( "showhelp", "false" );
+            }
+        }
+
+        function create_color_table() {
+
+            // assay color table
+            var html = "<table border='1'><thead><tr><th>Assay</th><th>Hex Code</th><th>Color</th></tr></thead><tbody>";
+            for(var j = 0; j < data_assay.length; j++) {
+                var elem = data_assay[j];
+                html = html + "<tr><td>"+elem.name+"</td><td>"+elem.color+"</td><td bgcolor='"+elem.color+"'></td></tr>";
+            }               
+            html = html + "</tbody></table>" + "<br><br>";
+
+            // epigenome id color table
+            html = html + "<table border='1'><thead><tr><th>Epigenome ID</th><th>Hex Code</th><th>Color</th></tr></thead><tbody>";
+            for(var j = 0; j < data_eid.length; j++) {
+                var elem = data_eid[j];
+                html = html + "<tr><td>"+elem.eid+"</td><td>"+elem.color+"</td><td bgcolor='"+elem.color+"'></td></tr>";
+            }
+            html = html + "</tbody></table>";
+
+            
+            document.getElementById("color-table").innerHTML = html;
+        }    
+
+        function load_files() {
+            var root_dir = document.getElementById("root-dir").value.trim();
+            var root_url = document.getElementById("root-url").value.trim();
+
+            // empty both boxes
+            document.getElementById("source").options.length = 0;
+            document.getElementById("dest").options.length = 0;
+
+            // check if root_dir is valid directory (preventing hacking)
+            var re = new RegExp('^[a-zA-Zа-яА-Я0-9_!/]+$')
+            if ( !root_dir.match( re ) ) {
+                alert( "Irregular characters in root directory!");
+                return;
+            }
+
+            if ( !root_dir.startsWith( "/srv/www" ) && !root_dir.startsWith( "/var/www" ) ) {
+                alert( "Root directory should start with /srv/www or /var/www!");
+                return;
+            }
+
+            // set cookie
+            setCookie( "rootdir", root_dir );
+            setCookie( "rooturl", root_url );
+
+            // get list of all files
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (req.readyState == 4 && req.status == 200) {
+                    var t = req.responseText;
+                    if (t.substr(0, 5) == 'ERROR') {
+                        alert('Failed to post data to server (error in cgi-bin app (getfiles)?)' + t, 3);
+                    } else {
+
+                        document.getElementById("text_dir_root").innerHTML= "<b>Genome data files found on the file system ("+root_dir+")</b>";
+
+                        var listbox = document.getElementById( "source" );
+
+                        //console.log(t);
+                        
+                        var files = t.split("\n");
+
+                        for(var i = 0; i < files.length; i++ ) {
+                            var file = files[i];
+
+                            if ( file=="" ) {
+                                continue;
+                            }
+
+                            if ( file.endsWith(".tbi") ) {
+                                file = file.replace(".tbi","");
+                            }
+                            else if ( file.endsWith(".bai") ) {
+                                file = file.replace(".bai","");
+                            }
+
+                            var opt = document.createElement("option");
+                            opt.text = file.replace( root_dir, "" );
+                            opt.value = file.replace( root_dir, root_url);
+
+                            listbox.options.add(opt);
+                        }
+                        
+                    }
+                }
+            };
+
+            req.open('POST', 'http://' + location.hostname + '/cgi-bin/getfiles', true);
+            req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            req.send(root_dir);
+        }
+
         function filter_source() {
             var searchString = document.getElementById("filter-text").value;
             var searchString2 = document.getElementById("filter-text2").value;
@@ -788,7 +617,7 @@
                 var opt = listbox.options[i];
                 var type = "";
                 var color = "";
-                var name = baseName( opt.value );
+                var name = get_basename( opt.value );
 
                 var lowercase = opt.text.toLowerCase();
 
@@ -1006,7 +835,176 @@
             req.send(json_str);
         }
 
+
+        // initializations
+        $(document).ready(function($) {
+
+            // get cookie information
+            document.getElementById("root-dir").value = getCookie("rootdir");
+            document.getElementById("root-url").value = getCookie("rooturl");
+            document.getElementById("ref-genome").value = getCookie("refgenome");
+            document.getElementById("filter-text").value = getCookie("filtertext");
+            document.getElementById("filter-text2").value = getCookie("filtertext2");
+
+            if ( getCookie("showhelp") == "true" ) {
+                document.getElementById("chkbox_show_help").checked = true;
+            }
+            else {
+                document.getElementById("chkbox_show_help").checked = false;
+            }
+            show_help();
+
+            create_color_table();
+        });
+
     </script>
+
+    <title>Visualizer</title>
+</head>
+
+
+<body>
+    <h1>Genome data visualizer</h1>
+    <br>
+    <input type="checkbox" id="chkbox_show_help" onclick="show_help()"> Show help</input>
+    <br><br>
+
+    <b>Root directory: (recursively find all genome data files under it) </b><br>
+    <input type="text" size="100" id="root-dir" name="root-dir" placeholder="Root directory..." />
+    <br><br>
+
+    <b>Root URL: (corresponding URL for the root directory)</b><br>
+    <input type="text" size="100" id="root-url" name="root-url" placeholder="Root URL..." />
+    <br><br>
+
+    <button onclick="load_files()"><b>Load genome data files</b></button>
+    <br><br><br>
+
+    <text id="text_dir_root"><b>Genome data files found on your file system under </b></text><br>
+
+    <div class="help-text" style="display:none">
+        To move selected items down to the next box:
+        <ul style="list-style-type:circle"> 
+        <li>Type 'a' key</li>
+        <li>Click "Move down" button</li>
+        <li>Double-click</li>
+        </ul>
+    </div>
+
+    <input type="text" size="50" id="filter-text" placeholder="Filter... (case-sensitive)" onkeyup="filter_source()" /> &nbsp; AND &nbsp;
+    <input type="text" size="50" id="filter-text2" placeholder="Filter2... (case-sensitive)" onkeyup="filter_source()" />
+    <br><br>
+    <select id="source" size=30 width=500 multiple onkeypress="return onkeypress_source(event)" ondblclick="listbox_moveacross('source', 'dest')">    </select>
+    <br><br>
+
+    <button onclick="listbox_moveacross('source', 'dest')"><b>Move down</b></button> &nbsp;
+    <button onclick="listbox_moveacross('dest', 'source')"><b>Move up</b></button>
+    <br><br>
+
+    <b>Genome data files chosen</b><br>
+
+    <div class="help-text" style="display:none">
+        To move selected items up to the previous box:
+        <ul style="list-style-type:circle"> 
+        <li>Type 'a' key</li>
+        <li>Click "Move up" button</li>
+        <li>Double-click</li>
+        </ul>
+    </div>
+    <select id="dest" size=30 width=500 multiple onkeypress="return onkeypress_dest(event)" ondblclick="listbox_moveacross('dest', 'source')">    </select>
+    <br><br>
+
+    <button onclick="prepare()"><b>Prepare</b></button> &nbsp;
+    <button onclick="listbox_selectall('dest', true)">Select all</button> &nbsp;
+    <button onclick="listbox_selectall('dest', false)">Select none</button>
+    <br><br>
+
+    <b>Specify track details (format: type,hex_color,name,URL) </b><br>
+
+    <div class="help-text" style="display:none">
+        -type: type of a track (don't leave it undefined)</b><br>
+        <ul style="list-style-type:circle">
+            <li> bigwig : automatic scaling </li>
+            <li> bigwig1 : fixed scaling, summary method = max (min:0 ~ max:40) </li>
+            <li> bigwig2 : fixed scaling, summary method = max (min:0 ~ max:200) </li>
+            <li> bigwig3 : fixed scaling, summary method = max (min:-40 ~ max:0) </li>
+            <li> bam </li>
+            <li> interaction : arc shaped interaction between two genome coords. <br>
+                <ul style="list-style-type:circle">
+                    Example: 6-column bed ( chr? \t start \t end \t chr?:start-end,score \t uniq_id strand (./-/+) )
+            <pre>
+    chr10   81058000        81059400        chr10:81106225-81108225,0.395519        1       .
+    chr10   81059400        81060000        chr10:81106225-81108225,0.097934        101     .
+            </pre>
+                </ul>
+            </li>
+            <li> categorical15 : 15-state chromatin state map. 
+                <ul style="list-style-type:circle">
+                    Example: 4-column bed ( chr? \t start \t end \t chr_state_id (integer) )
+                    <pre>
+    chr1    0       9800    15
+    chr1    9800    10600   9        
+                    </pre>
+                </ul>
+
+                <ul style="list-style-type:circle">
+                    Add the following line to the edit box below for the chr. state map of epigenome E001 and E017 (for example).
+                    <pre>
+    categorical15,E001_chr15,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/coreMarks/jointModel/final/E001_15_coreMarks_stateno.bed.gz
+    categorical15,E017_chr15,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/coreMarks/jointModel/final/E017_15_coreMarks_stateno.bed.gz
+                    </pre>
+                </ul>
+
+            </li>
+            <li> categorical18 : 18-state chromatin state map. </li>
+
+                <ul style="list-style-type:circle">
+                    Add the following line to the edit box below for the chr. state map of epigenome E004 and E050 (for example).
+                    <pre>
+    categorical18,E004_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/core_K27ac/jointModel/final/E004_18_core_K27ac_stateno.bed.gz
+    categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/core_K27ac/jointModel/final/E050_18_core_K27ac_stateno.bed.gz
+                    </pre>
+                </ul>
+
+            <li> bed : 6-column bed.</li>
+            <li> hammock : WashU epg. browser specific type.</li>
+        </ul>
+
+        -color: hex color code (look for color hex codes at <a href="http://www.rapidtables.com/web/color/RGB_Color.htm" target="_blank">here</a>)
+        
+            <ul style="list-style-type:circle">
+                bam, bed and interaction types have their own colors (according to the strand of reads or the sign of scores).
+                <br><br>            
+                <li>bigwig : blue </li>
+                <li>bedGraph : maroon </li>
+                <li>hammock : red </li>
+            </ul>
+
+        -name: by default track name is its filename.
+        <br><br>
+        
+        <b>IMPORTANT! : Do not leave any "undefined" types in the text area below. Specify an appropriate type for them.</b><br>
+        track format: type,hex_color,name,URL
+        <br><br>
+    </div>
+    
+    <textarea id="text-area" style="white-space: pre; word-wrap: normal; width: 700; height: 500"></textarea>
+    <br><br>
+
+    <input type="text" size="30" id="ref-genome" placeholder="Ref. genome (hg19, mm9, ...)" /> &nbsp;
+    <button onclick="visualize()"><b>Visualize</b></button> &nbsp;
+    <br><br>
+
+    <text id="text_json_url"></text>
+    <br><br>
+
+    <div class="help-text" style="display:none">
+        <b>Color table for epigenome IDs and assays (including histones).</b><br>
+        Overrides track colors if genome data file name contains epigenome IDs or assay names (ignoring all non-letter characters)<br>
+        Colors for epigenome IDs come from <a href="https://docs.google.com/spreadsheets/d/1yikGx4MsO9Ei36b64yOy9Vb6oPC5IBGlFbYEt-N6gOM/edit#gid=15" target="_blank">Roadmap Epigenomics Metadata Sheets</a>
+        <br><br>
+        <div id="color-table">test</div>
+    </div>
 
 </body>
 
