@@ -350,7 +350,7 @@
             var today = new Date();
             var expiry = new Date(today.getTime() + 30 * 24 * 3600 * 1000); // plus 30 days
             document.cookie=name + "=" + escape(value) + "; path=/; expires=" + expiry.toGMTString();
-        }       
+        }
 
         // getCookie: Original JavaScript code by Chirp Internet: www.chirp.com.au
         function getCookie(name) {
@@ -359,6 +359,18 @@
             return (value != null) ? unescape(value[1]) : null;
         }        
         /////////////////////////
+
+        function show_help() {
+            var chkbox = document.getElementById("chkbox_show_help");
+            if ( chkbox.checked ) {
+                $(".help-text").css( "display", "block" );
+                setCookie( "showhelp", "true" );
+            }
+            else {
+                $(".help-text").css( "display", "none" );
+                setCookie( "showhelp", "false" );
+            }
+        }
 
         function remove_special_chrs( str ) {
             return str.replace(/[^\w\s]/gi, "").replace(/_/g,"");
@@ -442,6 +454,15 @@
             document.getElementById("ref-genome").value = getCookie("refgenome");
             document.getElementById("filter-text").value = getCookie("filtertext");
             document.getElementById("filter-text2").value = getCookie("filtertext2");
+
+            if ( getCookie("showhelp") == "true" ) {
+                document.getElementById("chkbox_show_help").checked = true;
+            }
+            else {
+                document.getElementById("chkbox_show_help").checked = false;
+            }
+
+            show_help();
         });
 
     </script>
@@ -452,6 +473,8 @@
 
 <body>
     <h1>Genome data visualizer</h1>
+    <br>
+    <input type="checkbox" id="chkbox_show_help" onclick="show_help()"> Show help</input>
     <br><br>
 
     <b>Root directory: (recursively find all genome data files under it) </b><br>
@@ -466,12 +489,15 @@
     <br><br><br>
 
     <text id="text_dir_root"><b>Genome data files found on your file system under </b></text><br>
-    To move selected items down to the next box:
-    <ul style="list-style-type:circle"> 
-    <li>Type 'a' key</li>
-    <li>Click "Move down" button</li>
-    <li>Double-click</li>
-    </ul>
+
+    <div class="help-text" style="display:none">
+        To move selected items down to the next box:
+        <ul style="list-style-type:circle"> 
+        <li>Type 'a' key</li>
+        <li>Click "Move down" button</li>
+        <li>Double-click</li>
+        </ul>
+    </div>
 
     <input type="text" size="50" id="filter-text" placeholder="Filter... (case-sensitive)" onkeyup="filter_source()" /> &nbsp; AND &nbsp;
     <input type="text" size="50" id="filter-text2" placeholder="Filter2... (case-sensitive)" onkeyup="filter_source()" />
@@ -484,90 +510,91 @@
     <br><br>
 
     <b>Genome data files chosen</b><br>
-    To move selected items up to the previous box:
-    <ul style="list-style-type:circle"> 
-    <li>Type 'a' key</li>
-    <li>Click "Move up" button</li>
-    <li>Double-click</li>
-    </ul>    <select id="dest" size=30 width=500 multiple onkeypress="return onkeypress_dest(event)" ondblclick="listbox_moveacross('dest', 'source')">    </select>
+
+    <div class="help-text" style="display:none">
+        To move selected items up to the previous box:
+        <ul style="list-style-type:circle"> 
+        <li>Type 'a' key</li>
+        <li>Click "Move up" button</li>
+        <li>Double-click</li>
+        </ul>
+    </div>
+    <select id="dest" size=30 width=500 multiple onkeypress="return onkeypress_dest(event)" ondblclick="listbox_moveacross('dest', 'source')">    </select>
     <br><br>
 
     <button onclick="prepare()"><b>Prepare</b></button> &nbsp;
-<!--
-    <button onclick="listbox_move('dest', 'up')">Move up</button> &nbsp;
-    <button onclick="listbox_move('dest', 'down')">Move down</button> &nbsp;
--->
     <button onclick="listbox_selectall('dest', true)">Select all</button> &nbsp;
     <button onclick="listbox_selectall('dest', false)">Select none</button>
     <br><br>
 
     <b>Specify track details (format: type,hex_color,name,URL) </b><br>
-    
-    -type: type of a track (don't leave it undefined)</b><br>
-    <ul style="list-style-type:circle">
-        <li> bigwig : automatic scaling </li>
-        <li> bigwig1 : fixed scaling, summary method = max (min:0 ~ max:40) </li>
-        <li> bigwig2 : fixed scaling, summary method = max (min:0 ~ max:200) </li>
-        <li> bigwig3 : fixed scaling, summary method = max (min:-40 ~ max:0) </li>
-        <li> bam </li>
-        <li> interaction : arc shaped interaction between two genome coords. <br>
-            <ul style="list-style-type:circle">
-                Example: 6-column bed ( chr? \t start \t end \t chr?:start-end,score \t uniq_id strand (./-/+) )
-        <pre>
-chr10   81058000        81059400        chr10:81106225-81108225,0.395519        1       .
-chr10   81059400        81060000        chr10:81106225-81108225,0.097934        101     .
-        </pre>
-            </ul>
-        </li>
-        <li> categorical15 : 15-state chromatin state map. 
-            <ul style="list-style-type:circle">
-                Example: 4-column bed ( chr? \t start \t end \t chr_state_id (integer) )
-                <pre>
-chr1    0       9800    15
-chr1    9800    10600   9        
-                </pre>
-            </ul>
 
-            <ul style="list-style-type:circle">
-                Add the following line to the edit box below for the chr. state map of epigenome E001 and E017 (for example).
-                <pre>
-categorical15,E001_chr15,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/coreMarks/jointModel/final/E001_15_coreMarks_stateno.bed.gz
-categorical15,E017_chr15,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/coreMarks/jointModel/final/E017_15_coreMarks_stateno.bed.gz
-                </pre>
-            </ul>
-
-        </li>
-        <li> categorical18 : 18-state chromatin state map. </li>
-
-            <ul style="list-style-type:circle">
-                Add the following line to the edit box below for the chr. state map of epigenome E004 and E050 (for example).
-                <pre>
-categorical18,E004_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/core_K27ac/jointModel/final/E004_18_core_K27ac_stateno.bed.gz
-categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/core_K27ac/jointModel/final/E050_18_core_K27ac_stateno.bed.gz
-                </pre>
-            </ul>
-
-        <li> bed : 6-column bed.</li>
-        <li> hammock : WashU epg. browser specific type.</li>
-    </ul>
-
-    -color: hex color code (look for color hex codes at <a href="http://www.rapidtables.com/web/color/RGB_Color.htm" target="_blank">here</a>)
-    
+    <div class="help-text" style="display:none">
+        -type: type of a track (don't leave it undefined)</b><br>
         <ul style="list-style-type:circle">
-            bam, bed and interaction types have their own colors (according to the strand of reads or the sign of scores).
-            <br><br>            
-            <li>bigwig : blue </li>
-            <li>bedGraph : maroon </li>
-            <li>hammock : red </li>
+            <li> bigwig : automatic scaling </li>
+            <li> bigwig1 : fixed scaling, summary method = max (min:0 ~ max:40) </li>
+            <li> bigwig2 : fixed scaling, summary method = max (min:0 ~ max:200) </li>
+            <li> bigwig3 : fixed scaling, summary method = max (min:-40 ~ max:0) </li>
+            <li> bam </li>
+            <li> interaction : arc shaped interaction between two genome coords. <br>
+                <ul style="list-style-type:circle">
+                    Example: 6-column bed ( chr? \t start \t end \t chr?:start-end,score \t uniq_id strand (./-/+) )
+            <pre>
+    chr10   81058000        81059400        chr10:81106225-81108225,0.395519        1       .
+    chr10   81059400        81060000        chr10:81106225-81108225,0.097934        101     .
+            </pre>
+                </ul>
+            </li>
+            <li> categorical15 : 15-state chromatin state map. 
+                <ul style="list-style-type:circle">
+                    Example: 4-column bed ( chr? \t start \t end \t chr_state_id (integer) )
+                    <pre>
+    chr1    0       9800    15
+    chr1    9800    10600   9        
+                    </pre>
+                </ul>
+
+                <ul style="list-style-type:circle">
+                    Add the following line to the edit box below for the chr. state map of epigenome E001 and E017 (for example).
+                    <pre>
+    categorical15,E001_chr15,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/coreMarks/jointModel/final/E001_15_coreMarks_stateno.bed.gz
+    categorical15,E017_chr15,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/coreMarks/jointModel/final/E017_15_coreMarks_stateno.bed.gz
+                    </pre>
+                </ul>
+
+            </li>
+            <li> categorical18 : 18-state chromatin state map. </li>
+
+                <ul style="list-style-type:circle">
+                    Add the following line to the edit box below for the chr. state map of epigenome E004 and E050 (for example).
+                    <pre>
+    categorical18,E004_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/core_K27ac/jointModel/final/E004_18_core_K27ac_stateno.bed.gz
+    categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/core_K27ac/jointModel/final/E050_18_core_K27ac_stateno.bed.gz
+                    </pre>
+                </ul>
+
+            <li> bed : 6-column bed.</li>
+            <li> hammock : WashU epg. browser specific type.</li>
         </ul>
 
-    -name: by default track name is its filename.
-    <br><br>
+        -color: hex color code (look for color hex codes at <a href="http://www.rapidtables.com/web/color/RGB_Color.htm" target="_blank">here</a>)
+        
+            <ul style="list-style-type:circle">
+                bam, bed and interaction types have their own colors (according to the strand of reads or the sign of scores).
+                <br><br>            
+                <li>bigwig : blue </li>
+                <li>bedGraph : maroon </li>
+                <li>hammock : red </li>
+            </ul>
 
-    <br>
-    <b>IMPORTANT! : Do not leave any "undefined" types in the text area below. Specify an appropriate type for them.</b><br>
-    track format: type,hex_color,name,URL
-    <br><br>
+        -name: by default track name is its filename.
+        <br><br>
+        
+        <b>IMPORTANT! : Do not leave any "undefined" types in the text area below. Specify an appropriate type for them.</b><br>
+        track format: type,hex_color,name,URL
+        <br><br>
+    </div>
     
     <textarea id="text-area" style="white-space: pre; word-wrap: normal; width: 700; height: 500"></textarea>
     <br><br>
@@ -579,13 +606,13 @@ categorical18,E050_chr18,http://egg2.wustl.edu/roadmap/data/byFileType/chromhmmS
     <text id="text_json_url"></text>
     <br><br>
 
-    <b>Color table for epigenome IDs and assays (including histones).</b><br>
-    Overrides track colors if genome data file name contains epigenome IDs or assay names (ignoring all non-letter characters)<br>
-    Colors for epigenome IDs come from <a href="https://docs.google.com/spreadsheets/d/1yikGx4MsO9Ei36b64yOy9Vb6oPC5IBGlFbYEt-N6gOM/edit#gid=15" target="_blank">Roadmap Epigenomics Metadata Sheets</a>
-
-    <br><br>
-
-    <div id="color-table">test</div>
+    <div class="help-text" style="display:none">
+        <b>Color table for epigenome IDs and assays (including histones).</b><br>
+        Overrides track colors if genome data file name contains epigenome IDs or assay names (ignoring all non-letter characters)<br>
+        Colors for epigenome IDs come from <a href="https://docs.google.com/spreadsheets/d/1yikGx4MsO9Ei36b64yOy9Vb6oPC5IBGlFbYEt-N6gOM/edit#gid=15" target="_blank">Roadmap Epigenomics Metadata Sheets</a>
+        <br><br>
+        <div id="color-table">test</div>
+    </div>
 
     <script>
     
