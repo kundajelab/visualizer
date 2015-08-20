@@ -865,9 +865,28 @@
 
 <body>
     <h1>Genome data visualizer</h1>
-    <br>
+
     <input type="checkbox" id="chkbox_show_help" onclick="show_help()"> Show help</input>
     <br><br>
+
+    <div class="help-text" style="display:none">
+      List up all files visualizable with WashU Epigenome Browser (bed type files should be compressed with bgzip and indexed with tabix -p bed)
+      <br>
+        <ul style="list-style-type:circle">
+          <li>bam (with index .bai)</li>
+          <li>bigwig</li>
+          <li>bedGraph</li>
+          <li>bed (inteaction, tagAlign)</li>
+          <li>bedpe</li>
+          <li>hammock (converted from narrowPeak, broadPeak and gappedPeak)
+        </ul>
+      If your original files are compressed with gzip or not compressed at all. Use a converter provided in ./converter/recursive_gen_idx.sh<br>
+      It will automatically and recursively compresses/indexes/converts all genome data files listed above.
+      <pre>
+      $ ./converter/recursive_gen_idx.sh [TARGET_DIRECTORY]
+      </pre>
+    </div>
+
 
     <b>Root directory: (recursively find all genome data files under it) </b><br>
     <input type="text" size="100" id="root-dir" name="root-dir" placeholder="Root directory..." />
@@ -877,9 +896,9 @@
     <input type="text" size="100" id="root-url" name="root-url" placeholder="Root URL..." />
     <br><br>
 
-    <button onclick="load_files()"><b>Load genome data files</b></button>
-    <br><br><br>
+    <button onclick="load_files()"><b>Load genome data files</b></button><br>
 
+    <br><br>
     <text id="text_dir_root"><b>Genome data files found on your file system under </b></text><br>
 
     <div class="help-text" style="display:none">
