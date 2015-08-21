@@ -22,10 +22,12 @@
         var root_dir = "";
         var root_url = "";
 
+        var genome_coord_default = "chr9:36329955-37537411";
+
         var data_wubrowser_json_base = 
         [
            { "type":"native_track", "list":[ { "name":"refGene", "mode":"full", } ] },
-           { "type":"coordinate_override", "coord":"chr9,36329955,chr9,37537411", },
+           //{ "type":"coordinate_override", "coord":"chr9,36329955,chr9,37537411", },
         ];
 
         var data_chr_state_18 = 
@@ -496,8 +498,8 @@
 
         function create_color_table() {
 
-            // assay color table
-            var html = "<table border='1'><thead><tr><th>Assay</th><th>Hex Code</th><th>Color</th></tr></thead><tbody>";
+            // chr. mark color table
+            var html = "<table border='1'><thead><tr><th>Chromatin mark</th><th>Hex Code</th><th>Color</th></tr></thead><tbody>";
             for(var j = 0; j < data_assay.length; j++) {
                 var elem = data_assay[j];
                 html = html + "<tr><td>"+elem.name+"</td><td>"+elem.color+"</td><td bgcolor='"+elem.color+"'></td></tr>";
@@ -660,12 +662,12 @@
                     }
                 }
 
-                // override color for assay (or histone)
+                // override color for chromatin marks (or histone)
                 for(var j = 0; j < data_assay.length; j++) {
                     var elem = data_assay[j];
                     var assay = remove_special_chrs( elem.name.toLowerCase() );
 
-                    if ( lowercase.indexOf( assay ) > -1 ) { // if filename contains assay or histone name
+                    if ( lowercase.indexOf( assay ) > -1 ) { // if filename contains chr. mark or histone name
                         color = elem.color;
                         break;
                     }
@@ -681,6 +683,9 @@
             var ref_genome = document.getElementById("ref-genome").value.toLowerCase();
             setCookie( "refgenome", ref_genome );
 
+            var genome_coord = document.getElementById("genome-coord").value.toLowerCase();
+            setCookie( "genomecoord", genome_coord );
+
             var textarea = document.getElementById("text-area");
 
             if ( textarea.value == "" ) {
@@ -690,6 +695,15 @@
 
             var lines = textarea.value.split("\n");
             var json = JSON.parse(JSON.stringify(data_wubrowser_json_base));
+
+            // parse genome coord
+            var chr = genome_coord.split(":")[0];
+            var start = genome_coord.split(":")[1].split("-")[0];
+            var end = genome_coord.split(":")[1].split("-")[1];
+
+            //alert( chr + ":" + start + "-" + end );
+            var obj = { "type":"coordinate_override", "coord": chr+","+start+","+chr+","+end, };
+            json.push( obj );
 
             var found_undef_type = false;
 
@@ -803,8 +817,8 @@
                 obj.name = name;
 
                 json.push( obj );
-            }            
-
+            }
+      
             if ( found_undef_type ) {
                 alert("Tracks with unsupported (undefined) type were found and ignored.")
             }
@@ -842,9 +856,17 @@
             // get cookie information
             document.getElementById("root-dir").value = getCookie("rootdir");
             document.getElementById("root-url").value = getCookie("rooturl");
-            document.getElementById("ref-genome").value = getCookie("refgenome");
+
             document.getElementById("filter-text").value = getCookie("filtertext");
             document.getElementById("filter-text2").value = getCookie("filtertext2");
+
+            document.getElementById("ref-genome").value = getCookie("refgenome");
+
+            var genome_coord = getCookie("genomecoord");
+            if ( genome_coord == null || genome_coord == "" )
+                document.getElementById("genome-coord").value = genome_coord_default;
+            else
+                document.getElementById("genome-coord").value = genome_coord;
 
             if ( getCookie("showhelp") == "true" ) {
                 document.getElementById("chkbox_show_help").checked = true;
@@ -870,7 +892,8 @@
     <br><br>
 
     <div class="help-text" style="display:none">
-      List up all files visualizable with WashU Epigenome Browser (bed type files should be compressed with bgzip and indexed with tabix -p bed)
+      List up all visualizege genome data files recursivley under a specified web directory, and visualize them
+      <br>(bed type files should be compressed with bgzip and indexed with tabix -p bed).
       <br>
         <ul style="list-style-type:circle">
           <li>bam (with index .bai)</li>
@@ -1010,7 +1033,9 @@
     <textarea id="text-area" style="white-space: pre; word-wrap: normal; width: 700; height: 500"></textarea>
     <br><br>
 
-    <input type="text" size="30" id="ref-genome" placeholder="Ref. genome (hg19, mm9, ...)" /> &nbsp;
+    <input type="text" size="25" id="ref-genome" placeholder="Ref. genome (hg19, mm9, ...)" /> &nbsp; 
+      <input type="text" size="35" id="genome-coord" placeholder="Genome coord. (chr9:36329955-37537411)" />
+    <br><br>
     <button onclick="visualize()"><b>Visualize</b></button> &nbsp;
     <br><br>
 
@@ -1018,8 +1043,8 @@
     <br><br>
 
     <div class="help-text" style="display:none">
-        <b>Color table for epigenome IDs and assays (including histones).</b><br>
-        Overrides track colors if genome data file name contains epigenome IDs or assay names (ignoring all non-letter characters)<br>
+        <b>Color table for epigenome IDs and chromatin marks (including histones).</b><br>
+        Overrides track colors if genome data file name contains epigenome IDs or chromatin mark names (ignoring all non-letter characters)<br>
         Colors for epigenome IDs come from <a href="https://docs.google.com/spreadsheets/d/1yikGx4MsO9Ei36b64yOy9Vb6oPC5IBGlFbYEt-N6gOM/edit#gid=15" target="_blank">Roadmap Epigenomics Metadata Sheets</a>
         <br><br>
         <div id="color-table">test</div>
