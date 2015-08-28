@@ -458,7 +458,7 @@
             var src = document.getElementById(sourceID);
             var dest = document.getElementById(destID);
             for (var count = 0; count < src.options.length; count++) {
-                if (src.options[count].selected == true) {
+                if (src.options[count].selected == true && src.options[count].style.display != 'none'  ) {
                     var option = src.options[count];
                     var newoption = document.createElement("option");
                     newoption.value = option.value;
@@ -590,8 +590,8 @@
         }
 
         function filter_source() {
-            var searchString = document.getElementById("filter-text").value;
-            var searchString2 = document.getElementById("filter-text2").value;
+            var searchString = document.getElementById("filter-text").value.toLowerCase().trim();
+            var searchString2 = document.getElementById("filter-text2").value.toLowerCase().trim();
 
             setCookie( "filtertext", searchString );
             setCookie( "filtertext2", searchString2 );
@@ -892,14 +892,14 @@
     <br><br>
 
     <div class="help-text" style="display:none">
-      List up all visualizege genome data files recursivley under a specified web directory, and visualize them
+      List up all visualizable genome data files recursivley under a specified web directory, and visualize them
       <br>(bed type files should be compressed with bgzip and indexed with tabix -p bed).
       <br>
         <ul style="list-style-type:circle">
           <li>bam (with index .bai)</li>
           <li>bigwig</li>
           <li>bedGraph</li>
-          <li>bed (inteaction, tagAlign)</li>
+          <li>bed (interaction, tagAlign)</li>
           <li>bedpe</li>
           <li>hammock (converted from narrowPeak, broadPeak and gappedPeak)
         </ul>

@@ -8,14 +8,17 @@ UNSORTED_BAM_MSG="the alignment is not sorted"
 MID="SRT"
 
 # bed type files
-EXTS=("bam" "tagAlign" "tagalign" "bed" "bedpe" "bedGraph" "bedgraph" "bg" "bdg" "narrowPeak" "narrowpeak" "broadPeak" "broadpeak" "gappedPeak" "gappedpeak")
+
 
 if [ "$#" -lt 1 ]
 then
   echo "Recursivley generate index of data file to visualize it in WashU Epigenome Browser."
   echo "If data files is not .gz or unsorted, sort and then compress it with bgzip."
   echo ""
-  echo "Usage: recursive_gen_idx.sh [DIR]"
+  echo "Usage: recursive_gen_idx.sh [DIR] [EXT](optional)"
+  echo ""
+  echo '[EXT] should one of ("bam" "tagalign" "bed" "bedpe" "bedgraph" "bg" "bdg" "narrowpeak" "broadpeak" "gappedpeak")'
+  echo ""
   exit 1
 fi
 
@@ -23,6 +26,13 @@ if [ ! -d $1 ]
 then
   echo "Directory doesn't exists!"
   exit 2
+fi
+
+EXTS=("bam" "tagAlign" "tagalign" "bed" "bedpe" "bedGraph" "bedgraph" "bg" "bdg" "narrowPeak" "narrowpeak" "broadPeak" "broadpeak" "gappedPeak" "gappedpeak")
+
+if [ $# -eq 2 ];
+then
+  EXTS=("$2")
 fi
 
 shopt -s nullglob
