@@ -719,14 +719,14 @@
             var listbox = document.getElementById("dest");
             var textarea = document.getElementById("text-area");
 
-            var textarea_policy = document.getElementById("text-area-policy");
-            var textarea_policy2 = document.getElementById("text-area-policy2");
+            var textarea_rule = document.getElementById("text-area-rule");
+            var textarea_rule2 = document.getElementById("text-area-rule2");
 
-            set_cookie("textareapolicy", textarea_policy.value );
-            set_cookie("textareapolicy2", textarea_policy2.value );
+            set_cookie("textarearule", textarea_rule.value );
+            set_cookie("textarearule2", textarea_rule2.value );
 
-            var policies = textarea_policy.value.split("\n");
-            var policies2 = textarea_policy2.value.split("\n");
+            var rules = textarea_rule.value.split("\n");
+            var rules2 = textarea_rule2.value.split("\n");
 
             var tracks = new Array();
 
@@ -792,11 +792,11 @@
                     }
                 }
 
-                for(var j = 0; j < policies.length; j++) {
-                    var policy = policies[j];
-                    if ( policy == "" ) continue;
+                for(var j = 0; j < rules.length; j++) {
+                    var rule = rules[j];
+                    if ( rule == "" ) continue;
 
-                    var id_name_color = policy.split(",");
+                    var id_name_color = rule.split(",");
 
                     if ( id_name_color.length <= 1 ) continue
 
@@ -831,11 +831,11 @@
                     }
                 }
 
-                for(var j = 0; j < policies2.length; j++) {
-                    var policy2 = policies2[j];
-                    if ( policy2 == "" ) continue;
+                for(var j = 0; j < rules2.length; j++) {
+                    var rule2 = rules2[j];
+                    if ( rule2 == "" ) continue;
 
-                    var name1_name2 = policy2.split(",");
+                    var name1_name2 = rule2.split(",");
 
                     if ( name1_name2.length <= 1 ) continue
 
@@ -893,7 +893,12 @@
             var track_width = document.getElementById("track-width").value.trim();
             set_cookie( "trackwidth", track_width );
 
+            var textarea_add = document.getElementById("text-area-add");
             var textarea = document.getElementById("text-area");
+
+            set_cookie("textareaadd", textarea_add.value );
+
+            textarea.value = textarea.value + textarea_add.value;
 
             if ( textarea.value == "" ) {
                 alert("No data to visualize!")
@@ -1105,8 +1110,9 @@
                 document.getElementById("chkbox_show_help").checked = false;
             }
 
-            document.getElementById("text-area-policy").value = get_cookie("textareapolicy")
-            document.getElementById("text-area-policy2").value = get_cookie("textareapolicy2")
+            document.getElementById("text-area-rule").value = get_cookie("textarearule")
+            document.getElementById("text-area-rule2").value = get_cookie("textarearule2")
+            document.getElementById("text-area-add").value = get_cookie("textareaadd")
 
             show_help();
 
@@ -1138,9 +1144,11 @@
           <li>hammock (converted from narrowPeak, broadPeak and gappedPeak)
         </ul>
       If your original files are compressed with gzip or not compressed at all. Use a converter provided in ./converter/recursive_gen_idx.sh<br>
-      It will automatically and recursively compresses/indexes/converts all genome data files listed above.
+      It will automatically and recursively compresses/indexes/converts all genome data files listed above. <br>
+      If you specify file extension as the second parameter, files only with that extension will be converted.
       <pre>
-      $ ./converter/recursive_gen_idx.sh [TARGET_DIRECTORY]
+      $ ./converter/recursive_gen_idx.sh [TARGET_DIR]
+      $ ./converter/recursive_gen_idx.sh [TARGET_DIR] [FILE_EXT]
       </pre>
     </div>
 
@@ -1166,23 +1174,24 @@
         <li>Double-click</li>
         </ul>
     </div>
+    <br>
+    Filters: (case-insensitive) <br>
+    <input type="text" size="20" id="filter-text" placeholder="Filter..." onkeyup="filter_source()" /> &nbsp; AND &nbsp;
+    <input type="text" size="20" id="filter-text2" placeholder="Filter2..." onkeyup="filter_source()" /> &nbsp; AND &nbsp;
+    <input type="text" size="20" id="filter-text3" placeholder="Filter3..." onkeyup="filter_source()" /> <br> AND NOT (
+    <input type="text" size="20" id="filter-text-not-1" placeholder="Filter(NOT1)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
+    <input type="text" size="20" id="filter-text-not-2" placeholder="Filter(NOT2)..." onkeyup="filter_source()" /> ) <br> AND (
+    <input type="text" size="20" id="filter-text-or-1" placeholder="Filter(OR1)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
+    <input type="text" size="20" id="filter-text-or-2" placeholder="Filter(OR2)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
+    <input type="text" size="20" id="filter-text-or-3" placeholder="Filter(OR3)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
+    <input type="text" size="20" id="filter-text-or-4" placeholder="Filter(OR4)..." onkeyup="filter_source()" /> ) <br> AND { &nbsp; (
 
-    <input type="text" size="20" id="filter-text" placeholder="Filter... (case-insensitive)" onkeyup="filter_source()" /> &nbsp; AND &nbsp;
-    <input type="text" size="20" id="filter-text2" placeholder="Filter2... (case-insensitive)" onkeyup="filter_source()" /> &nbsp; AND &nbsp;
-    <input type="text" size="20" id="filter-text3" placeholder="Filter3... (case-insensitive)" onkeyup="filter_source()" /> <br> AND NOT (
-    <input type="text" size="20" id="filter-text-not-1" placeholder="Filter(NOT1)... (case-insensitive)" onkeyup="filter_source()" /> &nbsp; OR &nbsp;
-    <input type="text" size="20" id="filter-text-not-2" placeholder="Filter(NOT2)... (case-insensitive)" onkeyup="filter_source()" /> ) <br> AND (
-    <input type="text" size="20" id="filter-text-or-1" placeholder="Filter(OR1)... (case-insensitive)" onkeyup="filter_source()" /> &nbsp; OR &nbsp;
-    <input type="text" size="20" id="filter-text-or-2" placeholder="Filter(OR2)... (case-insensitive)" onkeyup="filter_source()" /> &nbsp; OR &nbsp;
-    <input type="text" size="20" id="filter-text-or-3" placeholder="Filter(OR3)... (case-insensitive)" onkeyup="filter_source()" /> &nbsp; OR &nbsp;
-    <input type="text" size="20" id="filter-text-or-4" placeholder="Filter(OR4)... (case-insensitive)" onkeyup="filter_source()" /> ) <br> AND { &nbsp; (
-
-    <input type="text" size="20" id="filter-text-and-or-1" placeholder="Filter(AND_OR1)... (case-insensitive)" onkeyup="filter_source()" /> &nbsp; AND &nbsp;
-    <input type="text" size="20" id="filter-text-and-or-2" placeholder="Filter(AND_OR2)... (case-insensitive)" onkeyup="filter_source()" /> ) &nbsp; OR <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (
-    <input type="text" size="20" id="filter-text-and-or-3" placeholder="Filter(AND_OR3)... (case-insensitive)" onkeyup="filter_source()" /> &nbsp; AND &nbsp;
-    <input type="text" size="20" id="filter-text-and-or-4" placeholder="Filter(AND_OR4)... (case-insensitive)" onkeyup="filter_source()" /> ) &nbsp; OR <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (
-    <input type="text" size="20" id="filter-text-and-or-5" placeholder="Filter(AND_OR5)... (case-insensitive)" onkeyup="filter_source()" /> &nbsp; AND &nbsp;
-    <input type="text" size="20" id="filter-text-and-or-6" placeholder="Filter(AND_OR6)... (case-insensitive)" onkeyup="filter_source()" /> ) &nbsp; }
+    <input type="text" size="20" id="filter-text-and-or-1" placeholder="Filter(AND_OR1)..." onkeyup="filter_source()" /> &nbsp; AND &nbsp;
+    <input type="text" size="20" id="filter-text-and-or-2" placeholder="Filter(AND_OR2)..." onkeyup="filter_source()" /> ) &nbsp; OR <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (
+    <input type="text" size="20" id="filter-text-and-or-3" placeholder="Filter(AND_OR3)..." onkeyup="filter_source()" /> &nbsp; AND &nbsp;
+    <input type="text" size="20" id="filter-text-and-or-4" placeholder="Filter(AND_OR4)..." onkeyup="filter_source()" /> ) &nbsp; OR <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (
+    <input type="text" size="20" id="filter-text-and-or-5" placeholder="Filter(AND_OR5)..." onkeyup="filter_source()" /> &nbsp; AND &nbsp;
+    <input type="text" size="20" id="filter-text-and-or-6" placeholder="Filter(AND_OR6)..." onkeyup="filter_source()" /> ) &nbsp; }
 
     <br><br>
     <select id="source" size=30 width=500 multiple onkeypress="return onkeypress_source(event)" ondblclick="listbox_moveacross('source', 'dest')">    </select>
@@ -1207,28 +1216,44 @@
     <select id="dest" size=30 width=500 multiple onkeypress="return onkeypress_dest(event)" ondblclick="listbox_moveacross('dest', 'source')">    </select>
     <br><br>
 
-    <b>Policy for naming/coloring (format: identifier,name,hex_color). </b>If you don't know, ignore<br>
+    <b>Rules-1 for track-naming/coloring/ordering (format: identifier,name,hex_color,rank). </b><br>
     <div class="help-text" style="display:none">
-        -identifier: data files with this string will have track name 'name' and color 'hex_color'<br>
-        -name : track names will stack<br>
-        -color : track color will be overriden (leave it blank if you don't want this)
+        <ul style="list-style-type:circle">
+            <li>identifier: Data file names with this string will have track name 'name', color 'hex_color' and rank 'rank'</li>
+            <li>name : Track name will be replaced. It will stack (don't leave this blank).</li>
+            <li>color : Track color will be overriden (leave it blank if not changing color).</li>
+            <li>rank (int) : Rank will stack. Tracks will be finally sorted in the ascending order of ranks (leave it blank if not sorting tracks).</li>
+        </ul>
+        Examples:
+        <ul style="list-style-type:circle">
+            <li>wgEncodeBroadHistoneGm12878H3K27me3,H3K27me3 ,#FF0000,0</li>
+            <li>wgEncodeHaibTfbsA549NrsfV0422111Etoh02Aln,TF-1 ,#FFFF00,1</li>
+            <lib>wgEncodeSydhTfbsHelas3RabiggRawDataRep1,Rep1 ,,100</li>
+            <li>fc.signal.bw,FC ,#0000FF,10</li>
+            <li>IDR,IDR ,#00FFFF,20</li>
+        </ul>
     </div>
-    <textarea id="text-area-policy" name="text-area-policy" style="white-space: pre; word-wrap: normal; width: 600; height: 200"></textarea>
+    <textarea id="text-area-rule" name="text-area-rule" 
+        placeholder="Leave it blank if you don't know what it is" 
+        style="white-space: pre; word-wrap: normal; width: 600; height: 175"></textarea>
     <br><br>
 
-    <b>Policy2 for replacing track names generated from policy1 (format: org_trk_name,replace_name,replace_color). </b>If you don't know, ignore<br>
+    <b>Rules-2 for replacing track-name/color/rank generated from Rules-1 (format: org_trk_name,name,hex_color,rank). </b><br>
     <div class="help-text" style="display:none">
-        -org_trk_name: track name generated from policy1<br>
-        -replace_name : replace orginal string with this<br>
-        -replace_color : hex_color will be overriden for this replacement (leave it blank if you don't want this)
+        <ul style="list-style-type:circle">
+            <li>org_trk_name: track name generated from rule1</li>
+            <li>name : Org_trk_name will be replaced. It won't stack (just replacement) (leave it blank if not changing track name)</li>
+            <li>color : Track color will be overriden (leave it blank if not changing color)</li>
+            <li>rank (int) : Rank will stack. Tracks will be finally sorted in the ascending order of ranks (leave it blank if not sorting tracks).</li>
+        </ul>
     </div>
-    <textarea id="text-area-policy2" name="text-area-policy2" style="white-space: pre; word-wrap: normal; width: 600; height: 200"></textarea>
+    <textarea id="text-area-rule2" name="text-area-rule2"
+        placeholder="Leave it blank if you don't know what it is" 
+        style="white-space: pre; word-wrap: normal; width: 600; height: 175"></textarea>
     <br><br>
 
-    <button onclick="prepare()"><b>Prepare</b></button> &nbsp;
-<!--    <button onclick="listbox_selectall('dest', true)">Select all</button> &nbsp;
-    <button onclick="listbox_selectall('dest', false)">Select none</button>
--->
+    <button onclick="prepare()"><b>Prepare visualization</b></button> &nbsp;
+
     <br><br>
 
     <b>Specify track details (format: type,hex_color,name,URL) </b><br>
@@ -1300,7 +1325,16 @@
         <br><br>
     </div>
     
-    <textarea id="text-area" name="text-area" style="white-space: pre; word-wrap: normal; width: 700; height: 500"></textarea>
+    <textarea id="text-area" name="text-area" style="white-space: pre; word-wrap: normal; width: 800; height: 500"></textarea>
+    <br><br>
+
+    <b>Extra tracks (same format: type,hex_color,name,URL). </b><br>
+    <div class="help-text" style="display:none">
+    Tracks defined here will be added at the end of the visualization session.
+    </div>       
+    <textarea id="text-area-add" name="text-area-add" 
+        placeholder="Leave it blank if you don't know what it is."
+        style="white-space: pre; word-wrap: normal; width: 800; height: 100"></textarea>
     <br><br>
 
     <input type="text" size="25" id="ref-genome" placeholder="Ref. genome (hg19, mm9, ...)" /> &nbsp; 
