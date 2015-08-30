@@ -350,15 +350,15 @@
             {   "eid":"Testis_Spermatozoa_Primary_Cells",   "color":"#CCFFFF" },
         ];
 
-        // setCookie: Original JavaScript code by Chirp Internet: www.chirp.com.au
-        function setCookie(name, value) {
+        // set_cookie: Original JavaScript code by Chirp Internet: www.chirp.com.au
+        function set_cookie(name, value) {
             var today = new Date();
             var expiry = new Date(today.getTime() + 30 * 24 * 3600 * 1000); // plus 30 days
             document.cookie=name + "=" + escape(value) + "; path=/; expires=" + expiry.toGMTString();
         }
 
-        // getCookie: Original JavaScript code by Chirp Internet: www.chirp.com.au
-        function getCookie(name) {
+        // get_cookie: Original JavaScript code by Chirp Internet: www.chirp.com.au
+        function get_cookie(name) {
             var re = new RegExp(name + "=([^;]+)");
             var value = re.exec(document.cookie);
             return (value != null) ? unescape(value[1]) : null;
@@ -457,6 +457,7 @@
         function listbox_moveacross(sourceID, destID) {
             var src = document.getElementById(sourceID);
             var dest = document.getElementById(destID);
+
             for (var count = 0; count < src.options.length; count++) {
                 if (src.options[count].selected == true && src.options[count].style.display != 'none'  ) {
                     var option = src.options[count];
@@ -488,11 +489,11 @@
             var chkbox = document.getElementById("chkbox_show_help");
             if ( chkbox.checked ) {
                 $(".help-text").css( "display", "block" );
-                setCookie( "showhelp", "true" );
+                set_cookie( "showhelp", "true" );
             }
             else {
                 $(".help-text").css( "display", "none" );
-                setCookie( "showhelp", "false" );
+                set_cookie( "showhelp", "false" );
             }
         }
 
@@ -539,8 +540,8 @@
             }
 
             // set cookie
-            setCookie( "rootdir", root_dir );
-            setCookie( "rooturl", root_url );
+            set_cookie( "rootdir", root_dir );
+            set_cookie( "rooturl", root_url );
 
             // get list of all files
             var req = new XMLHttpRequest();
@@ -579,7 +580,8 @@
 
                             listbox.options.add(opt);
                         }
-                        
+
+                        filter_source()                        
                     }
                 }
             };
@@ -590,23 +592,62 @@
         }
 
         function filter_source() {
-            var searchString = document.getElementById("filter-text").value.toLowerCase().trim();
-            var searchString2 = document.getElementById("filter-text2").value.toLowerCase().trim();
+            var search_string = document.getElementById("filter-text").value.toLowerCase().trim();
+            var search_string2 = document.getElementById("filter-text2").value.toLowerCase().trim();
+            var search_string3 = document.getElementById("filter-text3").value.toLowerCase().trim();
+            var search_string_not1 = document.getElementById("filter-text-not-1").value.toLowerCase().trim();
+            var search_string_not2 = document.getElementById("filter-text-not-2").value.toLowerCase().trim();
 
-            setCookie( "filtertext", searchString );
-            setCookie( "filtertext2", searchString2 );
+            var search_string_or1 = document.getElementById("filter-text-or-1").value.toLowerCase().trim();
+            var search_string_or2 = document.getElementById("filter-text-or-2").value.toLowerCase().trim();
+            var search_string_or3 = document.getElementById("filter-text-or-3").value.toLowerCase().trim();
+            var search_string_or4 = document.getElementById("filter-text-or-4").value.toLowerCase().trim();
+
+            set_cookie( "filtertext", search_string );
+            set_cookie( "filtertext2", search_string2 );
+            set_cookie( "filtertext3", search_string3 );
+            set_cookie( "filtertextnot1", search_string_not1 );
+            set_cookie( "filtertextnot2", search_string_not2 );
+
+            set_cookie( "filtertextor1", search_string_or1 );
+            set_cookie( "filtertextor2", search_string_or2 );
+            set_cookie( "filtertextor3", search_string_or3 );
+            set_cookie( "filtertextor4", search_string_or4 );
             
             var $opts = $("#source").find("option");
             $opts.each(function() {
                 var text = $(this).text().toLowerCase().trim();
                 //found a match - show this entry
-                if ( (searchString == "" || text.indexOf(searchString) > -1) &&
-                     (searchString2 == "" || text.indexOf(searchString2) > -1) ) {
+                
+                if ( (search_string == "" || text.indexOf(search_string) > -1) &&
+                     (search_string2 == "" || text.indexOf(search_string2) > -1) &&
+                     (search_string3 == "" || text.indexOf(search_string3) > -1) &&
+                     (search_string_not1 == "" || text.indexOf(search_string_not1) == -1) &&
+                     (search_string_not2 == "" || text.indexOf(search_string_not2) == -1) &&
+                     ( 
+                        ( 
+                            (search_string_or1=="") && (search_string_or2=="") && (search_string_or3=="") ||
+                            ( 
+                                (   (search_string_or1!="") || (search_string_or2!="") || (search_string_or3!="") ) &&
+                                (
+                                    (search_string_or1 != "" && text.indexOf(search_string_or1) > -1) ||
+                                    (search_string_or2 != "" && text.indexOf(search_string_or2) > -1) ||
+                                    (search_string_or3 != "" && text.indexOf(search_string_or3) > -1) ||
+                                    (search_string_or4 != "" && text.indexOf(search_string_or4) > -1) 
+                                )
+                            )
+                        )
+                     )                      
+                    ){
                     $(this).show();
+                    $(this).prop('disabled', false)
                 } else {
                     $(this).hide();
+                    $(this).prop('disabled', true)
                 }                
             });
+
+            // select all options in source box
         }
 
         function prepare() {
@@ -614,12 +655,19 @@
             var textarea = document.getElementById("text-area");
 
             var text = "";
+            var textarea_policy = document.getElementById("text-area-policy");
+
+            var policies = textarea_policy.value.split("\n");
+
+            set_cookie("textareapolicy", textarea_policy.value );
 
             for(var i = 0; i < listbox.options.length; i++) {
                 var opt = listbox.options[i];
+                var url = opt.value;
+                var file_basename = get_basename( url )
                 var type = "";
                 var color = "";
-                var name = get_basename( opt.value );
+                var name = file_basename;
 
                 var lowercase = opt.text.toLowerCase();
 
@@ -673,18 +721,51 @@
                     }
                 }
 
+                for(var j = 0; j < policies.length; j++) {
+                    var policy = policies[j];
+                    if ( policy == "" ) continue;
+
+                    var id_name_color = policy.split(",");
+
+                    if ( id_name_color.length <= 1 ) continue
+
+                    var pol_id = id_name_color[0].trim();
+                    var pol_name = id_name_color[1];
+                    var pol_color = ""
+
+                    if ( pol_id == "" ) continue
+                    
+                    if ( id_name_color.length >= 3) 
+                        pol_color = id_name_color[2].trim();
+
+                    if ( url.indexOf(pol_id) > -1 ) { // if id string is in track filename
+                        if ( pol_name != "" ) {
+                            if ( name == file_basename )
+                                name = pol_name
+                            else
+                                name = name + pol_name
+                        }
+                        if ( pol_color != "" ) {
+                            color = pol_color
+                        }
+                    }
+               }
+            
+
                 text = text + type + "," + color + "," + name + "," + opt.value + "\n";
-            }            
+            }
+
+
 
             textarea.value = text;
         }
 
         function visualize() {            
             var ref_genome = document.getElementById("ref-genome").value.toLowerCase();
-            setCookie( "refgenome", ref_genome );
+            set_cookie( "refgenome", ref_genome );
 
             var genome_coord = document.getElementById("genome-coord").value.toLowerCase();
-            setCookie( "genomecoord", genome_coord );
+            set_cookie( "genomecoord", genome_coord );
 
             var textarea = document.getElementById("text-area");
 
@@ -697,9 +778,9 @@
             var json = JSON.parse(JSON.stringify(data_wubrowser_json_base));
 
             // parse genome coord
-            var chr = genome_coord.split(":")[0];
-            var start = genome_coord.split(":")[1].split("-")[0];
-            var end = genome_coord.split(":")[1].split("-")[1];
+            var chr = genome_coord.split(":")[0].trim();
+            var start = genome_coord.split(":")[1].split("-")[0].trim();
+            var end = genome_coord.split(":")[1].split("-")[1].trim();
 
             //alert( chr + ":" + start + "-" + end );
             var obj = { "type":"coordinate_override", "coord": chr+","+start+","+chr+","+end, };
@@ -715,10 +796,10 @@
                 var type_color_name_url = line.split(",");
 
                 // parse to each component
-                var type = type_color_name_url[0];
-                var color = type_color_name_url[1];
-                var name = type_color_name_url[2];
-                var url = type_color_name_url[3];
+                var type = type_color_name_url[0].trim();
+                var color = type_color_name_url[1].trim();
+                var name = type_color_name_url[2].trim();
+                var url = type_color_name_url[3].trim();
 
                 // color                
                 var pr = hex_to_rgb(color).r;
@@ -854,26 +935,36 @@
         $(document).ready(function($) {
 
             // get cookie information
-            document.getElementById("root-dir").value = getCookie("rootdir");
-            document.getElementById("root-url").value = getCookie("rooturl");
+            document.getElementById("root-dir").value = get_cookie("rootdir");
+            document.getElementById("root-url").value = get_cookie("rooturl");
 
-            document.getElementById("filter-text").value = getCookie("filtertext");
-            document.getElementById("filter-text2").value = getCookie("filtertext2");
+            document.getElementById("filter-text").value = get_cookie("filtertext");
+            document.getElementById("filter-text2").value = get_cookie("filtertext2");
+            document.getElementById("filter-text3").value = get_cookie("filtertext3");
+            document.getElementById("filter-text-not-1").value = get_cookie("filtertextnot1");
+            document.getElementById("filter-text-not-2").value = get_cookie("filtertextnot2");
 
-            document.getElementById("ref-genome").value = getCookie("refgenome");
+            document.getElementById("filter-text-or-1").value = get_cookie("filtertextor1");
+            document.getElementById("filter-text-or-2").value = get_cookie("filtertextor2");
+            document.getElementById("filter-text-or-3").value = get_cookie("filtertextor3");
 
-            var genome_coord = getCookie("genomecoord");
+            document.getElementById("ref-genome").value = get_cookie("refgenome");
+
+            var genome_coord = get_cookie("genomecoord");
             if ( genome_coord == null || genome_coord == "" )
                 document.getElementById("genome-coord").value = genome_coord_default;
             else
                 document.getElementById("genome-coord").value = genome_coord;
 
-            if ( getCookie("showhelp") == "true" ) {
+            if ( get_cookie("showhelp") == "true" ) {
                 document.getElementById("chkbox_show_help").checked = true;
             }
             else {
                 document.getElementById("chkbox_show_help").checked = false;
             }
+
+            document.getElementById("text-area-policy").value = get_cookie("textareapolicy")
+
             show_help();
 
             create_color_table();
@@ -933,14 +1024,23 @@
         </ul>
     </div>
 
-    <input type="text" size="50" id="filter-text" placeholder="Filter... (case-sensitive)" onkeyup="filter_source()" /> &nbsp; AND &nbsp;
-    <input type="text" size="50" id="filter-text2" placeholder="Filter2... (case-sensitive)" onkeyup="filter_source()" />
+    <input type="text" size="20" id="filter-text" placeholder="Filter... (case-insensitive)" onkeyup="filter_source()" /> &nbsp; AND &nbsp;
+    <input type="text" size="20" id="filter-text2" placeholder="Filter2... (case-insensitive)" onkeyup="filter_source()" /> &nbsp; AND &nbsp;
+    <input type="text" size="20" id="filter-text3" placeholder="Filter3... (case-insensitive)" onkeyup="filter_source()" /> <br> AND NOT (
+    <input type="text" size="20" id="filter-text-not-1" placeholder="Filter(NOT1)... (case-insensitive)" onkeyup="filter_source()" /> &nbsp; OR &nbsp;
+    <input type="text" size="20" id="filter-text-not-2" placeholder="Filter(NOT2)... (case-insensitive)" onkeyup="filter_source()" /> ) <br> AND (
+    <input type="text" size="20" id="filter-text-or-1" placeholder="Filter(OR1)... (case-insensitive)" onkeyup="filter_source()" /> &nbsp; OR &nbsp;
+    <input type="text" size="20" id="filter-text-or-2" placeholder="Filter(OR2)... (case-insensitive)" onkeyup="filter_source()" /> &nbsp; OR &nbsp;
+    <input type="text" size="20" id="filter-text-or-3" placeholder="Filter(OR3)... (case-insensitive)" onkeyup="filter_source()" /> &nbsp; OR &nbsp;
+    <input type="text" size="20" id="filter-text-or-4" placeholder="Filter(OR4)... (case-insensitive)" onkeyup="filter_source()" /> )
     <br><br>
     <select id="source" size=30 width=500 multiple onkeypress="return onkeypress_source(event)" ondblclick="listbox_moveacross('source', 'dest')">    </select>
     <br><br>
 
     <button onclick="listbox_moveacross('source', 'dest')"><b>Move down</b></button> &nbsp;
-    <button onclick="listbox_moveacross('dest', 'source')"><b>Move up</b></button>
+    <button onclick="listbox_moveacross('dest', 'source') "><b>Move up</b></button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button onclick="listbox_selectall('source', true); listbox_moveacross('source', 'dest') "><b>Move down all</b></button> &nbsp;
+    <button onclick="listbox_selectall('dest', true); listbox_moveacross('dest', 'source') "><b>Move up all</b></button>
     <br><br>
 
     <b>Genome data files chosen</b><br>
@@ -956,15 +1056,25 @@
     <select id="dest" size=30 width=500 multiple onkeypress="return onkeypress_dest(event)" ondblclick="listbox_moveacross('dest', 'source')">    </select>
     <br><br>
 
+    <b>Policy for naming/coloring (format: identifier,name,hex_color) </b><br>
+    <div class="help-text" style="display:none">
+        -identifier: data files with this string will have track name 'name' and color 'hex_color'<br>
+        -name : track names will stack<br>
+        -color : track color will be overriden (leave it blank if you don't want this)
+    </div>
+    <textarea id="text-area-policy" name="text-area-policy" style="white-space: pre; word-wrap: normal; width: 700; height: 400"></textarea>
+    <br><br>
+
     <button onclick="prepare()"><b>Prepare</b></button> &nbsp;
-    <button onclick="listbox_selectall('dest', true)">Select all</button> &nbsp;
+<!--    <button onclick="listbox_selectall('dest', true)">Select all</button> &nbsp;
     <button onclick="listbox_selectall('dest', false)">Select none</button>
+-->
     <br><br>
 
     <b>Specify track details (format: type,hex_color,name,URL) </b><br>
 
     <div class="help-text" style="display:none">
-        -type: type of a track (don't leave it undefined)</b><br>
+        -type: type of a track (don't leave it undefined)<br>
         <ul style="list-style-type:circle">
             <li> bigwig : automatic scaling </li>
             <li> bigwig1 : fixed scaling, summary method = max (min:0 ~ max:40) </li>
@@ -1030,7 +1140,7 @@
         <br><br>
     </div>
     
-    <textarea id="text-area" style="white-space: pre; word-wrap: normal; width: 700; height: 500"></textarea>
+    <textarea id="text-area" name="text-area" style="white-space: pre; word-wrap: normal; width: 700; height: 500"></textarea>
     <br><br>
 
     <input type="text" size="25" id="ref-genome" placeholder="Ref. genome (hg19, mm9, ...)" /> &nbsp; 

@@ -5,6 +5,7 @@
 #include <errno.h>
 #include <dirent.h>
 #include <limits.h>
+#include <sys/stat.h>
 
 //#define DIR_ROOT "/srv/www/kundaje/leepc12"
 //#define URL_ROOT "http://mitra.stanford.edu/kundaje/leepc12"
@@ -110,8 +111,17 @@ void list_dir (const char * dir_name )
                 if ( ends_with( d_name, ".tbi" ) || 
 			ends_with( d_name, ".bigwig" ) || 
 			ends_with( d_name, ".bw" ) ||
-			ends_with( d_name, ".bai" ) )
-                         printf ("%s/%s\n", dir_name, d_name);
+			ends_with( d_name, ".bai" ) ) {
+
+			char filename[300];
+			sprintf(filename, "%s/%s", dir_name, d_name);
+                        //printf ("%s/%s\n", dir_name, d_name);
+
+			struct stat st;
+			stat(filename, &st);
+			if ( st.st_size > 0 ) printf( "%s\n", filename );
+		}
+                        
 //                         printf ("%s/%s\n", str_replace(dir_name,DIR_ROOT,URL_ROOT), d_name);
         }
 
