@@ -592,126 +592,142 @@
         }
 
         function filter_source() {
-            var search_string = document.getElementById("filter-text").value.trim();
-            var search_string2 = document.getElementById("filter-text2").value.trim();
-            var search_string3 = document.getElementById("filter-text3").value.trim();
-            var search_string_not1 = document.getElementById("filter-text-not-1").value.trim();
-            var search_string_not2 = document.getElementById("filter-text-not-2").value.trim();
+            var str = document.getElementById("filter-text").value.trim();
+            var str2 = document.getElementById("filter-text2").value.trim();
+            var str3 = document.getElementById("filter-text3").value.trim();
+            var str_not1 = document.getElementById("filter-text-not-1").value.trim();
+            var str_not2 = document.getElementById("filter-text-not-2").value.trim();
+/*
+            var str_or1 = document.getElementById("filter-text-or-1").value.trim();
+            var str_or2 = document.getElementById("filter-text-or-2").value.trim();
+            var str_or3 = document.getElementById("filter-text-or-3").value.trim();
+            var str_or4 = document.getElementById("filter-text-or-4").value.trim();
+*/
+            var str_and_or1 = document.getElementById("filter-text-and-or-1").value.trim();
+            var str_and_or2 = document.getElementById("filter-text-and-or-2").value.trim();
+            var str_and_or3 = document.getElementById("filter-text-and-or-3").value.trim();
+            var str_and_or4 = document.getElementById("filter-text-and-or-4").value.trim();
+            var str_and_or5 = document.getElementById("filter-text-and-or-5").value.trim();
+            var str_and_or6 = document.getElementById("filter-text-and-or-6").value.trim();
+            var str_and_or7 = document.getElementById("filter-text-and-or-7").value.trim();
+            var str_and_or8 = document.getElementById("filter-text-and-or-8").value.trim();
 
-            var search_string_or1 = document.getElementById("filter-text-or-1").value.trim();
-            var search_string_or2 = document.getElementById("filter-text-or-2").value.trim();
-            var search_string_or3 = document.getElementById("filter-text-or-3").value.trim();
-            var search_string_or4 = document.getElementById("filter-text-or-4").value.trim();
+            set_cookie( "filtertext", str );
+            set_cookie( "filtertext2", str2 );
+            set_cookie( "filtertext3", str3 );
+            set_cookie( "filtertextnot1", str_not1 );
+            set_cookie( "filtertextnot2", str_not2 );
+/*
+            set_cookie( "filtertextor1", str_or1 );
+            set_cookie( "filtertextor2", str_or2 );
+            set_cookie( "filtertextor3", str_or3 );
+            set_cookie( "filtertextor4", str_or4 );
+*/
+            set_cookie( "filtertextandor1", str_and_or1 );
+            set_cookie( "filtertextandor2", str_and_or2 );
+            set_cookie( "filtertextandor3", str_and_or3 );
+            set_cookie( "filtertextandor4", str_and_or4 );
+            set_cookie( "filtertextandor5", str_and_or5 );
+            set_cookie( "filtertextandor6", str_and_or6 );
+            set_cookie( "filtertextandor7", str_and_or7 );
+            set_cookie( "filtertextandor8", str_and_or8 );
 
-            var search_string_and_or1 = document.getElementById("filter-text-and-or-1").value.trim();
-            var search_string_and_or2 = document.getElementById("filter-text-and-or-2").value.trim();
-            var search_string_and_or3 = document.getElementById("filter-text-and-or-3").value.trim();
-            var search_string_and_or4 = document.getElementById("filter-text-and-or-4").value.trim();
-            var search_string_and_or5 = document.getElementById("filter-text-and-or-5").value.trim();
-            var search_string_and_or6 = document.getElementById("filter-text-and-or-6").value.trim();
-
-            set_cookie( "filtertext", search_string );
-            set_cookie( "filtertext2", search_string2 );
-            set_cookie( "filtertext3", search_string3 );
-            set_cookie( "filtertextnot1", search_string_not1 );
-            set_cookie( "filtertextnot2", search_string_not2 );
-
-            set_cookie( "filtertextor1", search_string_or1 );
-            set_cookie( "filtertextor2", search_string_or2 );
-            set_cookie( "filtertextor3", search_string_or3 );
-            set_cookie( "filtertextor4", search_string_or4 );
-
-            set_cookie( "filtertextandor1", search_string_and_or1 );
-            set_cookie( "filtertextandor2", search_string_and_or2 );
-            set_cookie( "filtertextandor3", search_string_and_or3 );
-            set_cookie( "filtertextandor4", search_string_and_or4 );
-            set_cookie( "filtertextandor5", search_string_and_or5 );
-            set_cookie( "filtertextandor6", search_string_and_or6 );
-
-            search_string       = search_string.toLowerCase();
-            search_string2      = search_string2.toLowerCase();
-            search_string3      = search_string3.toLowerCase();
-            search_string_not1  = search_string_not1.toLowerCase();
-            search_string_not2  = search_string_not2.toLowerCase();
-
-            search_string_or1   = search_string_or1.toLowerCase();
-            search_string_or2   = search_string_or2.toLowerCase();
-            search_string_or3   = search_string_or3.toLowerCase();
-            search_string_or4   = search_string_or4.toLowerCase();
-
-            search_string_and_or1   = search_string_and_or1.toLowerCase();
-            search_string_and_or2   = search_string_and_or2.toLowerCase();
-            search_string_and_or3   = search_string_and_or3.toLowerCase();
-            search_string_and_or4   = search_string_and_or4.toLowerCase();
-            search_string_and_or5   = search_string_and_or5.toLowerCase();
-            search_string_and_or6   = search_string_and_or6.toLowerCase();
+            // make them lowercase
+            str       = str.toLowerCase();
+            str2      = str2.toLowerCase();
+            str3      = str3.toLowerCase();
+            str_not1  = str_not1.toLowerCase();
+            str_not2  = str_not2.toLowerCase();
+/*
+            str_or1   = str_or1.toLowerCase();
+            str_or2   = str_or2.toLowerCase();
+            str_or3   = str_or3.toLowerCase();
+            str_or4   = str_or4.toLowerCase();
+*/
+            str_and_or1   = str_and_or1.toLowerCase();
+            str_and_or2   = str_and_or2.toLowerCase();
+            str_and_or3   = str_and_or3.toLowerCase();
+            str_and_or4   = str_and_or4.toLowerCase();
+            str_and_or5   = str_and_or5.toLowerCase();
+            str_and_or6   = str_and_or6.toLowerCase();
+            str_and_or5   = str_and_or7.toLowerCase();
+            str_and_or6   = str_and_or8.toLowerCase();
             
+            var option_cnt = 0;
             var $opts = $("#source").find("option");
             $opts.each(function() {
                 var text = $(this).text().toLowerCase().trim();
                 //found a match - show this entry
-
                 
-                if ( (search_string == "" || text.indexOf(search_string) > -1) &&
-                    (search_string2 == "" || text.indexOf(search_string2) > -1) &&
-                    (search_string3 == "" || text.indexOf(search_string3) > -1) &&
-                    (search_string_not1 == "" || text.indexOf(search_string_not1) == -1) &&
-                    (search_string_not2 == "" || text.indexOf(search_string_not2) == -1) &&
+                if ( (str == "" || text.indexOf(str) > -1) &&
+                    (str2 == "" || text.indexOf(str2) > -1) &&
+                    (str3 == "" || text.indexOf(str3) > -1) &&
+                    (str_not1 == "" || text.indexOf(str_not1) == -1) &&
+                    (str_not2 == "" || text.indexOf(str_not2) == -1) &&
+/*                    
                     ( 
                         ( 
-                            (search_string_or1=="") && (search_string_or2=="") && (search_string_or3=="") && (search_string_or4=="") ||
+                            (str_or1=="") && (str_or2=="") && (str_or3=="") && (str_or4=="") ||
                             ( 
                                 (
-                                    (search_string_or1 != "" && text.indexOf(search_string_or1) > -1) ||
-                                    (search_string_or2 != "" && text.indexOf(search_string_or2) > -1) ||
-                                    (search_string_or3 != "" && text.indexOf(search_string_or3) > -1) ||
-                                    (search_string_or4 != "" && text.indexOf(search_string_or4) > -1) 
+                                    (str_or1 != "" && text.indexOf(str_or1) > -1) ||
+                                    (str_or2 != "" && text.indexOf(str_or2) > -1) ||
+                                    (str_or3 != "" && text.indexOf(str_or3) > -1) ||
+                                    (str_or4 != "" && text.indexOf(str_or4) > -1) 
                                 )
                             )
                         )
                     ) &&
+*/                    
                     (
-                        ( 
-                            ( search_string_and_or1 =="") && (search_string_and_or2 =="") && 
-                            ( search_string_and_or3 =="") && (search_string_and_or4 =="") &&
-                            ( search_string_and_or5 =="") && (search_string_and_or6 =="") 
+                        (   ( str_and_or1 =="") && (str_and_or2 =="") && 
+                            ( str_and_or3 =="") && (str_and_or4 =="") &&
+                            ( str_and_or5 =="") && (str_and_or6 =="") &&
+                            ( str_and_or7 =="") && (str_and_or8 =="") 
                         ) ||
-                        (
-                            ( ( search_string_and_or1!="") || (search_string_and_or2!="") ) &&
+                        (   ( ( str_and_or1!="") || (str_and_or2!="") ) &&
                             ( 
                                 (                                   
-                                    (search_string_and_or1 == "" || text.indexOf(search_string_and_or1) > -1) &&
-                                    (search_string_and_or2 == "" || text.indexOf(search_string_and_or2) > -1)
+                                    (str_and_or1 == "" || text.indexOf(str_and_or1) > -1) &&
+                                    (str_and_or2 == "" || text.indexOf(str_and_or2) > -1)
                                 )
                             ) 
                         ) ||
-                        (
-                            ( ( search_string_and_or3!="") || (search_string_and_or4!="") ) &&
+                        (   ( ( str_and_or3!="") || (str_and_or4!="") ) &&
                             ( 
                                 ( 
-                                    (search_string_and_or3 == "" || text.indexOf(search_string_and_or3) > -1) &&
-                                    (search_string_and_or4 == "" || text.indexOf(search_string_and_or4) > -1)
+                                    (str_and_or3 == "" || text.indexOf(str_and_or3) > -1) &&
+                                    (str_and_or4 == "" || text.indexOf(str_and_or4) > -1)
                                 )
                             )
                         ) ||
-                        (
-                            ( ( search_string_and_or5!="") || (search_string_and_or6!="") ) &&
+                        (   ( ( str_and_or5!="") || (str_and_or6!="") ) &&
                             ( 
                                 ( 
-                                    (search_string_and_or5 == "" || text.indexOf(search_string_and_or5) > -1) &&
-                                    (search_string_and_or6 == "" || text.indexOf(search_string_and_or6) > -1)
+                                    (str_and_or5 == "" || text.indexOf(str_and_or5) > -1) &&
+                                    (str_and_or6 == "" || text.indexOf(str_and_or6) > -1)
+                                )
+                            )
+                        ) ||
+                        (   ( ( str_and_or7!="") || (str_and_or8!="") ) &&
+                            ( 
+                                ( 
+                                    (str_and_or7 == "" || text.indexOf(str_and_or7) > -1) &&
+                                    (str_and_or8 == "" || text.indexOf(str_and_or8) > -1)
                                 )
                             )
                         )
                     ) ){
                     $(this).show();
                     $(this).prop('disabled', false)
+                    option_cnt++;
                 } else {
                     $(this).hide();
                     $(this).prop('disabled', true)
                 }                
             });
-
+            
+            document.getElementById("text_selected_files").innerHTML= "Files after filtering: " + option_cnt;
             // select all options in source box
         }
 
@@ -1074,19 +1090,20 @@
             document.getElementById("filter-text3").value = get_cookie("filtertext3");
             document.getElementById("filter-text-not-1").value = get_cookie("filtertextnot1");
             document.getElementById("filter-text-not-2").value = get_cookie("filtertextnot2");
-
+/*
             document.getElementById("filter-text-or-1").value = get_cookie("filtertextor1");
             document.getElementById("filter-text-or-2").value = get_cookie("filtertextor2");
             document.getElementById("filter-text-or-3").value = get_cookie("filtertextor3");
             document.getElementById("filter-text-or-4").value = get_cookie("filtertextor4");
-
+*/
             document.getElementById("filter-text-and-or-1").value = get_cookie("filtertextandor1");
             document.getElementById("filter-text-and-or-2").value = get_cookie("filtertextandor2");
             document.getElementById("filter-text-and-or-3").value = get_cookie("filtertextandor3");
             document.getElementById("filter-text-and-or-4").value = get_cookie("filtertextandor4");
             document.getElementById("filter-text-and-or-5").value = get_cookie("filtertextandor5");
             document.getElementById("filter-text-and-or-6").value = get_cookie("filtertextandor6");
-
+            document.getElementById("filter-text-and-or-7").value = get_cookie("filtertextandor7");
+            document.getElementById("filter-text-and-or-8").value = get_cookie("filtertextandor8");
 
             document.getElementById("ref-genome").value = get_cookie("refgenome");
 
@@ -1175,23 +1192,27 @@
         </ul>
     </div>
     <br>
-    Filters: (case-insensitive) <br>
+    Filters: (case-insensitive) &nbsp;&nbsp; <text id="text_selected_files"></text>
+    <br>
     <input type="text" size="20" id="filter-text" placeholder="Filter..." onkeyup="filter_source()" /> &nbsp; AND &nbsp;
     <input type="text" size="20" id="filter-text2" placeholder="Filter2..." onkeyup="filter_source()" /> &nbsp; AND &nbsp;
     <input type="text" size="20" id="filter-text3" placeholder="Filter3..." onkeyup="filter_source()" /> <br> AND NOT (
     <input type="text" size="20" id="filter-text-not-1" placeholder="Filter(NOT1)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
-    <input type="text" size="20" id="filter-text-not-2" placeholder="Filter(NOT2)..." onkeyup="filter_source()" /> ) <br> AND (
+    <input type="text" size="20" id="filter-text-not-2" placeholder="Filter(NOT2)..." onkeyup="filter_source()" /> ) <br> AND { (
+<!--    
     <input type="text" size="20" id="filter-text-or-1" placeholder="Filter(OR1)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
     <input type="text" size="20" id="filter-text-or-2" placeholder="Filter(OR2)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
     <input type="text" size="20" id="filter-text-or-3" placeholder="Filter(OR3)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
     <input type="text" size="20" id="filter-text-or-4" placeholder="Filter(OR4)..." onkeyup="filter_source()" /> ) <br> AND { &nbsp; (
-
+-->
     <input type="text" size="20" id="filter-text-and-or-1" placeholder="Filter(AND_OR1)..." onkeyup="filter_source()" /> &nbsp; AND &nbsp;
-    <input type="text" size="20" id="filter-text-and-or-2" placeholder="Filter(AND_OR2)..." onkeyup="filter_source()" /> ) &nbsp; OR <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (
+    <input type="text" size="20" id="filter-text-and-or-2" placeholder="Filter(AND_OR2)..." onkeyup="filter_source()" /> ) &nbsp; OR &nbsp; (
     <input type="text" size="20" id="filter-text-and-or-3" placeholder="Filter(AND_OR3)..." onkeyup="filter_source()" /> &nbsp; AND &nbsp;
-    <input type="text" size="20" id="filter-text-and-or-4" placeholder="Filter(AND_OR4)..." onkeyup="filter_source()" /> ) &nbsp; OR <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (
+    <input type="text" size="20" id="filter-text-and-or-4" placeholder="Filter(AND_OR4)..." onkeyup="filter_source()" /> ) &nbsp; OR <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (
     <input type="text" size="20" id="filter-text-and-or-5" placeholder="Filter(AND_OR5)..." onkeyup="filter_source()" /> &nbsp; AND &nbsp;
-    <input type="text" size="20" id="filter-text-and-or-6" placeholder="Filter(AND_OR6)..." onkeyup="filter_source()" /> ) &nbsp; }
+    <input type="text" size="20" id="filter-text-and-or-6" placeholder="Filter(AND_OR6)..." onkeyup="filter_source()" /> ) &nbsp; OR &nbsp; (
+    <input type="text" size="20" id="filter-text-and-or-7" placeholder="Filter(AND_OR7)..." onkeyup="filter_source()" /> &nbsp; AND &nbsp;
+    <input type="text" size="20" id="filter-text-and-or-8" placeholder="Filter(AND_OR8)..." onkeyup="filter_source()" /> ) &nbsp; }
 
     <br><br>
     <select id="source" size=30 width=500 multiple onkeypress="return onkeypress_source(event)" ondblclick="listbox_moveacross('source', 'dest')">    </select>
