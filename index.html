@@ -539,6 +539,11 @@
                 return;
             }
 
+	    if ( !root_url.startsWith( "http://" ) && !root_url.startsWith( "https://" ) ) {
+                alert( "Root URL start with http:// or https://!");
+                return
+            }
+
             // set cookie
             set_cookie( "rootdir", root_dir );
             set_cookie( "rooturl", root_url );
@@ -570,13 +575,27 @@
                             if ( file.endsWith(".tbi") ) {
                                 file = file.replace(".tbi","");
                             }
+                            else if ( file.endsWith(".bam.bai") ) {
+                                file = file.replace(".bam.bai",".bam");
+                            }
                             else if ( file.endsWith(".bai") ) {
-                                file = file.replace(".bai","");
+                                file = file.replace(".bai",".bam");
                             }
 
                             var opt = document.createElement("option");
                             opt.text = file.replace( root_dir, "" );
                             opt.value = file.replace( root_dir, root_url);
+
+                            // check for duplicate entries
+
+                            var found_dup_opt = false;
+                            for(var j = 0; j < listbox.options.length; j++ ) {
+                                   if ( listbox.options[j].value.trim() == opt.value.trim() ) {
+                                           found_dup_opt = true;
+                                           continue;
+                                   }
+                            }
+                            if ( found_dup_opt ) continue;
 
                             listbox.options.add(opt);
                         }
@@ -1160,8 +1179,12 @@
           <li>bedpe</li>
           <li>hammock (converted from narrowPeak, broadPeak and gappedPeak)
         </ul>
-      If your original files are compressed with gzip or not compressed at all. Use a converter provided in ./converter/recursive_gen_idx.sh<br>
-      It will automatically and recursively compresses/indexes/converts all genome data files listed above. <br>
+      For bigwig, you don't need any conversion to visualize it, it's already compressed and indexed.<br>
+      For bam, you need to have index (.bam.bai)<br>
+      For bed type files (bed, bedGraph, bedpe, hammock, ...), they need to be compressed with 'bgzip' and indexed with 'tabix -p bed'.<br>
+      <br>
+      If you don't have index for your bams and bed type files, use a converter provided in ./converter/recursive_gen_idx.sh<br>
+      It will automatically and recursively bgzip/index/convert all genome data files listed above. <br>
       If you specify file extension as the second parameter, files only with that extension will be converted.
       <pre>
       $ ./converter/recursive_gen_idx.sh [TARGET_DIR]
@@ -1171,11 +1194,11 @@
 
 
     <b>Root directory: (recursively find all genome data files under it) </b><br>
-    <input type="text" size="100" id="root-dir" name="root-dir" placeholder="Root directory..." />
+    <input type="text" size="100" id="root-dir" name="root-dir" placeholder="Root directory... (/var/www/...)" />
     <br><br>
 
     <b>Root URL: (corresponding URL for the root directory)</b><br>
-    <input type="text" size="100" id="root-url" name="root-url" placeholder="Root URL..." />
+    <input type="text" size="100" id="root-url" name="root-url" placeholder="Root URL... (http://...)" />
     <br><br>
 
     <button onclick="load_files()"><b>Load genome data files</b></button><br>
