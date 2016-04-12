@@ -88,7 +88,8 @@ void list_dir (const char * dir_name )
     if (! d) {
         fprintf (stderr, "Cannot open directory '%s': %s\n",
                  dir_name, strerror (errno));
-        exit (EXIT_FAILURE);
+	return;
+        //exit (EXIT_FAILURE);
     }
     while (1) {
         struct dirent * entry;
@@ -125,7 +126,7 @@ void list_dir (const char * dir_name )
 //                         printf ("%s/%s\n", str_replace(dir_name,DIR_ROOT,URL_ROOT), d_name);
         }
 
-        if (entry->d_type & DT_DIR) {
+        if (entry->d_type & DT_DIR || entry->d_type & DT_LNK) {
 
             if (strcmp (d_name, "..") != 0 &&
                 strcmp (d_name, ".") != 0) {
@@ -162,5 +163,6 @@ int main()
         DIR_ROOT=strdup(line);
 
 	list_dir(DIR_ROOT);
+	//list_dir("/srv/www/kundaje/leepc12");
 	return 1;
 }
