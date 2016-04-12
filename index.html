@@ -616,6 +616,8 @@
             var str3 = document.getElementById("filter-text3").value.trim();
             var str_not1 = document.getElementById("filter-text-not-1").value.trim();
             var str_not2 = document.getElementById("filter-text-not-2").value.trim();
+            var str_not3 = document.getElementById("filter-text-not-3").value.trim();
+            var str_not4 = document.getElementById("filter-text-not-4").value.trim();
 /*
             var str_or1 = document.getElementById("filter-text-or-1").value.trim();
             var str_or2 = document.getElementById("filter-text-or-2").value.trim();
@@ -636,6 +638,8 @@
             set_cookie( "filtertext3", str3 );
             set_cookie( "filtertextnot1", str_not1 );
             set_cookie( "filtertextnot2", str_not2 );
+            set_cookie( "filtertextnot3", str_not3 );
+            set_cookie( "filtertextnot4", str_not4 );
 /*
             set_cookie( "filtertextor1", str_or1 );
             set_cookie( "filtertextor2", str_or2 );
@@ -657,6 +661,8 @@
             str3      = str3.toLowerCase();
             str_not1  = str_not1.toLowerCase();
             str_not2  = str_not2.toLowerCase();
+            str_not3  = str_not3.toLowerCase();
+            str_not4  = str_not4.toLowerCase();
 /*
             str_or1   = str_or1.toLowerCase();
             str_or2   = str_or2.toLowerCase();
@@ -683,6 +689,8 @@
                     (str3 == "" || text.indexOf(str3) > -1) &&
                     (str_not1 == "" || text.indexOf(str_not1) == -1) &&
                     (str_not2 == "" || text.indexOf(str_not2) == -1) &&
+                    (str_not3 == "" || text.indexOf(str_not3) == -1) &&
+                    (str_not4 == "" || text.indexOf(str_not4) == -1) &&
 /*                    
                     ( 
                         ( 
@@ -794,7 +802,7 @@
                     color = "#800000"; // maroon
                 }
                 else if ( lowercase.endsWith(".bigwig") || lowercase.endsWith(".bw") ) {
-                    type = "bigwig";
+                    type = "bigwig1";
                     color = "#0000FF"; // blue
                 }
                 else {
@@ -1115,6 +1123,8 @@
             document.getElementById("filter-text3").value = get_cookie("filtertext3");
             document.getElementById("filter-text-not-1").value = get_cookie("filtertextnot1");
             document.getElementById("filter-text-not-2").value = get_cookie("filtertextnot2");
+            document.getElementById("filter-text-not-3").value = get_cookie("filtertextnot3");
+            document.getElementById("filter-text-not-4").value = get_cookie("filtertextnot4");
 /*
             document.getElementById("filter-text-or-1").value = get_cookie("filtertextor1");
             document.getElementById("filter-text-or-2").value = get_cookie("filtertextor2");
@@ -1227,7 +1237,9 @@
     <input type="text" size="20" id="filter-text2" placeholder="Filter2..." onkeyup="filter_source()" /> &nbsp; AND &nbsp;
     <input type="text" size="20" id="filter-text3" placeholder="Filter3..." onkeyup="filter_source()" /> <br> AND NOT (
     <input type="text" size="20" id="filter-text-not-1" placeholder="Filter(NOT1)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
-    <input type="text" size="20" id="filter-text-not-2" placeholder="Filter(NOT2)..." onkeyup="filter_source()" /> ) <br> AND { (
+    <input type="text" size="20" id="filter-text-not-2" placeholder="Filter(NOT2)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
+    <input type="text" size="20" id="filter-text-not-3" placeholder="Filter(NOT3)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
+    <input type="text" size="20" id="filter-text-not-4" placeholder="Filter(NOT4)..." onkeyup="filter_source()" /> ) <br> AND { (
 <!--    
     <input type="text" size="20" id="filter-text-or-1" placeholder="Filter(OR1)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
     <input type="text" size="20" id="filter-text-or-2" placeholder="Filter(OR2)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;

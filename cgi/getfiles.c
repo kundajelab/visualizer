@@ -163,6 +163,6 @@ int main()
         DIR_ROOT=strdup(line);
 
 	list_dir(DIR_ROOT);
-	//list_dir("/srv/www/kundaje/leepc12");
+	//list_dir("/srv/www/kundaje/leepc12/atac");
 	return 1;
 }

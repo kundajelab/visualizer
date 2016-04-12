@@ -91,7 +91,8 @@ do
       rm -f $FILE2.gz $FILE2.gz.tbi
       TMP=$FILE2.tmp
       gzip -d -c $FILE | sed '/^\(chr\)/!d' | sort -k1,1V -k2,2n > $TMP
-      python $P2H $TMP $FILE2
+      #python $P2H $TMP $FILE2
+      $P2H $TMP $FILE2
       rm -r $FILE2.tmp
       ;;
 
