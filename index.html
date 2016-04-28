@@ -786,7 +786,12 @@
                 var lowercase = opt.text.toLowerCase();
 
                 if ( lowercase.endsWith("hammock.gz") ) {
-                    type = "hammock";
+                    if ( lowercase.indexOf("idr") > -1 ) {
+                       type = "hammock_idr";
+                    }
+                    else {
+                       type = "hammock";
+                    }
                     color = "#FF0000"; // red
                 }
                 else if ( lowercase.endsWith(".bam") ) {
@@ -1058,6 +1063,17 @@
                             strokecolor:"#ff6600", 
                             scorescalelst:[{"type":1,"min":0,"max":40},{"type":0},{"type":0},{"type":0}],
                             scorenamelst:["signal value", "P value (-log10)","Q value (-log10)"],
+                                "qtc": { "summeth":2,
+                                    "fontsize":"0pt","fontfamily":"sans-serif",
+                                     "nr": pr, "ng": pg, "nb": pb, } };
+                        break;
+
+                    case "hammock_idr":
+                        obj = { "type": "hammock", "name": "", "url": url,
+                            "mode": "barplot", "showscoreidx":4, "boxcolor":rgb_to_hex( pr+","+pg+","+pb ),
+                            strokecolor:"#ff6600",
+                            scorescalelst:[{"type":1,"min":0,"max":40},{"type":0},{"type":0},{"type":0},{"type":0}],
+                            scorenamelst:["signal value","P value (-log10)","Q value (-log10)","local IDR (-log10)","global IDR (-log10)"],
                                 "qtc": { "summeth":2,
                                     "fontsize":"0pt","fontfamily":"sans-serif",
                                      "nr": pr, "ng": pg, "nb": pb, } };
