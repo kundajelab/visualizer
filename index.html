@@ -528,7 +528,7 @@
             document.getElementById("dest").options.length = 0;
 
             // check if root_dir is valid directory (preventing hacking)
-            var re = new RegExp('^[a-zA-Zа-яА-Я0-9_!/]+$')
+            var re = new RegExp('^[-a-zA-Zа-яА-Я0-9_!/]+$')
             if ( !root_dir.match( re ) ) {
                 alert( "Irregular characters in root directory!");
                 return;
@@ -786,7 +786,7 @@
                 var lowercase = opt.text.toLowerCase();
 
                 if ( lowercase.endsWith("hammock.gz") ) {
-                    if ( lowercase.indexOf("idr") > -1 ) {
+                    if ( lowercase.indexOf("12-col.bed") > -1 ) {
                        type = "hammock_idr";
                     }
                     else {
