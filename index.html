@@ -528,7 +528,7 @@
             document.getElementById("dest").options.length = 0;
 
             // check if root_dir is valid directory (preventing hacking)
-            var re = new RegExp('^[-a-zA-Zа-яА-Я0-9_!/]+$')
+            var re = new RegExp('^[-a-zA-Zа-яА-Я0-9_+!/]+$')
             if ( !root_dir.match( re ) ) {
                 alert( "Irregular characters in root directory!");
                 return;
@@ -618,6 +618,10 @@
             var str_not2 = document.getElementById("filter-text-not-2").value.trim();
             var str_not3 = document.getElementById("filter-text-not-3").value.trim();
             var str_not4 = document.getElementById("filter-text-not-4").value.trim();
+            var str_not5 = document.getElementById("filter-text-not-5").value.trim();
+            var str_not6 = document.getElementById("filter-text-not-6").value.trim();
+            var str_not7 = document.getElementById("filter-text-not-7").value.trim();
+            var str_not8 = document.getElementById("filter-text-not-8").value.trim();
 /*
             var str_or1 = document.getElementById("filter-text-or-1").value.trim();
             var str_or2 = document.getElementById("filter-text-or-2").value.trim();
@@ -640,6 +644,10 @@
             set_cookie( "filtertextnot2", str_not2 );
             set_cookie( "filtertextnot3", str_not3 );
             set_cookie( "filtertextnot4", str_not4 );
+            set_cookie( "filtertextnot5", str_not5 );
+            set_cookie( "filtertextnot6", str_not6 );
+            set_cookie( "filtertextnot7", str_not7 );
+            set_cookie( "filtertextnot8", str_not8 );
 /*
             set_cookie( "filtertextor1", str_or1 );
             set_cookie( "filtertextor2", str_or2 );
@@ -663,6 +671,10 @@
             str_not2  = str_not2.toLowerCase();
             str_not3  = str_not3.toLowerCase();
             str_not4  = str_not4.toLowerCase();
+            str_not5  = str_not5.toLowerCase();
+            str_not6  = str_not6.toLowerCase();
+            str_not7  = str_not7.toLowerCase();
+            str_not8  = str_not8.toLowerCase();
 /*
             str_or1   = str_or1.toLowerCase();
             str_or2   = str_or2.toLowerCase();
@@ -691,6 +703,10 @@
                     (str_not2 == "" || text.indexOf(str_not2) == -1) &&
                     (str_not3 == "" || text.indexOf(str_not3) == -1) &&
                     (str_not4 == "" || text.indexOf(str_not4) == -1) &&
+                    (str_not5 == "" || text.indexOf(str_not5) == -1) &&
+                    (str_not6 == "" || text.indexOf(str_not6) == -1) &&
+                    (str_not7 == "" || text.indexOf(str_not7) == -1) &&
+                    (str_not8 == "" || text.indexOf(str_not8) == -1) &&
 /*                    
                     ( 
                         ( 
@@ -1141,6 +1157,10 @@
             document.getElementById("filter-text-not-2").value = get_cookie("filtertextnot2");
             document.getElementById("filter-text-not-3").value = get_cookie("filtertextnot3");
             document.getElementById("filter-text-not-4").value = get_cookie("filtertextnot4");
+            document.getElementById("filter-text-not-5").value = get_cookie("filtertextnot5");
+            document.getElementById("filter-text-not-6").value = get_cookie("filtertextnot6");
+            document.getElementById("filter-text-not-7").value = get_cookie("filtertextnot7");
+            document.getElementById("filter-text-not-8").value = get_cookie("filtertextnot8");
 /*
             document.getElementById("filter-text-or-1").value = get_cookie("filtertextor1");
             document.getElementById("filter-text-or-2").value = get_cookie("filtertextor2");
@@ -1255,7 +1275,12 @@
     <input type="text" size="20" id="filter-text-not-1" placeholder="Filter(NOT1)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
     <input type="text" size="20" id="filter-text-not-2" placeholder="Filter(NOT2)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
     <input type="text" size="20" id="filter-text-not-3" placeholder="Filter(NOT3)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
-    <input type="text" size="20" id="filter-text-not-4" placeholder="Filter(NOT4)..." onkeyup="filter_source()" /> ) <br> AND { (
+    <input type="text" size="20" id="filter-text-not-4" placeholder="Filter(NOT4)..." onkeyup="filter_source()" /> &nbsp; OR <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="text" size="20" id="filter-text-not-5" placeholder="Filter(NOT5)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
+    <input type="text" size="20" id="filter-text-not-6" placeholder="Filter(NOT6)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
+    <input type="text" size="20" id="filter-text-not-7" placeholder="Filter(NOT7)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
+    <input type="text" size="20" id="filter-text-not-8" placeholder="Filter(NOT8)..." onkeyup="filter_source()" /> ) <br> AND { (
 <!--    
     <input type="text" size="20" id="filter-text-or-1" placeholder="Filter(OR1)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
     <input type="text" size="20" id="filter-text-or-2" placeholder="Filter(OR2)..." onkeyup="filter_source()" /> &nbsp; OR &nbsp;
