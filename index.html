@@ -648,12 +648,6 @@
             set_cookie( "filtertextnot6", str_not6 );
             set_cookie( "filtertextnot7", str_not7 );
             set_cookie( "filtertextnot8", str_not8 );
-/*
-            set_cookie( "filtertextor1", str_or1 );
-            set_cookie( "filtertextor2", str_or2 );
-            set_cookie( "filtertextor3", str_or3 );
-            set_cookie( "filtertextor4", str_or4 );
-*/
             set_cookie( "filtertextandor1", str_and_or1 );
             set_cookie( "filtertextandor2", str_and_or2 );
             set_cookie( "filtertextandor3", str_and_or3 );
@@ -675,20 +669,14 @@
             str_not6  = str_not6.toLowerCase();
             str_not7  = str_not7.toLowerCase();
             str_not8  = str_not8.toLowerCase();
-/*
-            str_or1   = str_or1.toLowerCase();
-            str_or2   = str_or2.toLowerCase();
-            str_or3   = str_or3.toLowerCase();
-            str_or4   = str_or4.toLowerCase();
-*/
             str_and_or1   = str_and_or1.toLowerCase();
             str_and_or2   = str_and_or2.toLowerCase();
             str_and_or3   = str_and_or3.toLowerCase();
             str_and_or4   = str_and_or4.toLowerCase();
             str_and_or5   = str_and_or5.toLowerCase();
             str_and_or6   = str_and_or6.toLowerCase();
-            str_and_or5   = str_and_or7.toLowerCase();
-            str_and_or6   = str_and_or8.toLowerCase();
+            str_and_or7   = str_and_or7.toLowerCase();
+            str_and_or8   = str_and_or8.toLowerCase();
             
             var option_cnt = 0;
             var $opts = $("#source").find("option");
@@ -707,21 +695,6 @@
                     (str_not6 == "" || text.indexOf(str_not6) == -1) &&
                     (str_not7 == "" || text.indexOf(str_not7) == -1) &&
                     (str_not8 == "" || text.indexOf(str_not8) == -1) &&
-/*                    
-                    ( 
-                        ( 
-                            (str_or1=="") && (str_or2=="") && (str_or3=="") && (str_or4=="") ||
-                            ( 
-                                (
-                                    (str_or1 != "" && text.indexOf(str_or1) > -1) ||
-                                    (str_or2 != "" && text.indexOf(str_or2) > -1) ||
-                                    (str_or3 != "" && text.indexOf(str_or3) > -1) ||
-                                    (str_or4 != "" && text.indexOf(str_or4) > -1) 
-                                )
-                            )
-                        )
-                    ) &&
-*/                    
                     (
                         (   ( str_and_or1 =="") && (str_and_or2 =="") && 
                             ( str_and_or3 =="") && (str_and_or4 =="") &&
